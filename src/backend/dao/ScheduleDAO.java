@@ -9,14 +9,25 @@ import java.util.List;
 
 public class ScheduleDAO {
 
+    // Holds the last error so the UI can display it instead of silently failing
+    private String lastError = "";
+
+    public String getLastError() { return lastError; }
+
     public boolean addSchedule(Schedule s) {
+        lastError = "";
         String sql = "INSERT INTO schedules (doctor_id, available_date, start_time, end_time, max_patients) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
-            ps.setInt(1, s.getDoctorId()); ps.setString(2, s.getAvailableDate());
-            ps.setString(3, s.getStartTime()); ps.setString(4, s.getEndTime());
+            ps.setInt(1, s.getDoctorId());
+            ps.setString(2, s.getAvailableDate());
+            ps.setString(3, s.getStartTime());
+            ps.setString(4, s.getEndTime());
             ps.setInt(5, s.getMaxPatients());
             return ps.executeUpdate() > 0;
-        } catch (SQLException e) { e.printStackTrace(); }
+        } catch (SQLException e) {
+            lastError = e.getMessage();
+            e.printStackTrace();
+        }
         return false;
     }
 
@@ -47,10 +58,12 @@ public class ScheduleDAO {
 
     public List<Schedule> getSchedulesByDoctor(int doctorId) {
         List<Schedule> list = new ArrayList<>();
+        // Only return today's and future schedules — past slots are not bookable
         String sql = "SELECT s.*, u.full_name FROM schedules s " +
                      "JOIN doctors d ON s.doctor_id = d.id " +
                      "JOIN users u ON d.user_id = u.id " +
-                     "WHERE s.doctor_id = ? ORDER BY s.available_date";
+                     "WHERE s.doctor_id = ? AND s.available_date >= CURDATE() " +
+                     "ORDER BY s.available_date";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
             ps.setInt(1, doctorId);
             ResultSet rs = ps.executeQuery();
