@@ -41,8 +41,8 @@ public class DBConnection {
     public static Connection getConnection() {
         try {
             // Check if we need to create a new connection
-            // (either we don't have one, or the old one got closed somehow)
-            if (connection == null || connection.isClosed()) {
+            // (either we don't have one, or the old one got closed/timed out)
+            if (connection == null || connection.isClosed() || !connection.isValid(2)) {
                 
                 // Step 1: Load the MySQL driver (tells Java how to talk to MySQL)
                 Class.forName("com.mysql.cj.jdbc.Driver");

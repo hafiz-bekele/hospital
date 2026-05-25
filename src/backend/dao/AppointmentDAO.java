@@ -28,6 +28,21 @@ public class AppointmentDAO {
         return false;
     }
 
+    /**
+     * Check if a patient already has an active (non-cancelled, non-rejected) booking
+     * for the same schedule slot. Prevents duplicate bookings.
+     */
+    public boolean hasActiveBooking(int patientId, int scheduleId) {
+        String sql = "SELECT id FROM appointments WHERE patient_id = ? AND schedule_id = ? " +
+                     "AND status NOT IN ('CANCELLED', 'REJECTED')";
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, patientId);
+            ps.setInt(2, scheduleId);
+            return ps.executeQuery().next();
+        } catch (SQLException e) { e.printStackTrace(); }
+        return false;
+    }
+
     public boolean updateStatus(int appointmentId, String status) {
         String sql = "UPDATE appointments SET status = ? WHERE id = ?";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
@@ -65,13 +80,18 @@ public class AppointmentDAO {
 
     public List<Appointment> getAppointmentsByDoctorFiltered(int doctorId, String status, String fromDate, String toDate) {
         List<Appointment> list = new ArrayList<>();
+        // Build query with placeholders only — never concatenate user input into SQL
         StringBuilder sql = new StringBuilder(BASE_SQL + "WHERE a.doctor_id = ?");
-        if (status != null && !status.equals("ALL")) sql.append(" AND a.status = '").append(status).append("'");
-        if (fromDate != null && !fromDate.isEmpty()) sql.append(" AND a.appointment_date >= '").append(fromDate).append("'");
-        if (toDate   != null && !toDate.isEmpty())   sql.append(" AND a.appointment_date <= '").append(toDate).append("'");
+        if (status   != null && !status.equals("ALL")) sql.append(" AND a.status = ?");
+        if (fromDate != null && !fromDate.isEmpty())   sql.append(" AND a.appointment_date >= ?");
+        if (toDate   != null && !toDate.isEmpty())     sql.append(" AND a.appointment_date <= ?");
         sql.append(" ORDER BY a.appointment_date DESC");
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql.toString())) {
-            ps.setInt(1, doctorId);
+            int idx = 1;
+            ps.setInt(idx++, doctorId);
+            if (status   != null && !status.equals("ALL")) ps.setString(idx++, status);
+            if (fromDate != null && !fromDate.isEmpty())   ps.setString(idx++, fromDate);
+            if (toDate   != null && !toDate.isEmpty())     ps.setString(idx,   toDate);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) list.add(mapAppointment(rs));
         } catch (SQLException e) { e.printStackTrace(); }
@@ -89,15 +109,22 @@ public class AppointmentDAO {
 
     public List<Appointment> searchAppointments(String patientName, String doctorName, String status, String fromDate, String toDate) {
         List<Appointment> list = new ArrayList<>();
+        // Use ? placeholders for all user-supplied values to prevent SQL injection
         StringBuilder sql = new StringBuilder(BASE_SQL + "WHERE 1=1");
-        if (patientName != null && !patientName.isEmpty()) sql.append(" AND u.full_name LIKE '%").append(patientName).append("%'");
-        if (doctorName  != null && !doctorName.isEmpty())  sql.append(" AND du.full_name LIKE '%").append(doctorName).append("%'");
-        if (status      != null && !status.equals("ALL"))  sql.append(" AND a.status = '").append(status).append("'");
-        if (fromDate    != null && !fromDate.isEmpty())    sql.append(" AND a.appointment_date >= '").append(fromDate).append("'");
-        if (toDate      != null && !toDate.isEmpty())      sql.append(" AND a.appointment_date <= '").append(toDate).append("'");
+        if (patientName != null && !patientName.isEmpty()) sql.append(" AND u.full_name LIKE ?");
+        if (doctorName  != null && !doctorName.isEmpty())  sql.append(" AND du.full_name LIKE ?");
+        if (status      != null && !status.equals("ALL"))  sql.append(" AND a.status = ?");
+        if (fromDate    != null && !fromDate.isEmpty())    sql.append(" AND a.appointment_date >= ?");
+        if (toDate      != null && !toDate.isEmpty())      sql.append(" AND a.appointment_date <= ?");
         sql.append(" ORDER BY a.appointment_date DESC");
-        try (Statement st = DBConnection.getConnection().createStatement()) {
-            ResultSet rs = st.executeQuery(sql.toString());
+        try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql.toString())) {
+            int idx = 1;
+            if (patientName != null && !patientName.isEmpty()) ps.setString(idx++, "%" + patientName + "%");
+            if (doctorName  != null && !doctorName.isEmpty())  ps.setString(idx++, "%" + doctorName  + "%");
+            if (status      != null && !status.equals("ALL"))  ps.setString(idx++, status);
+            if (fromDate    != null && !fromDate.isEmpty())    ps.setString(idx++, fromDate);
+            if (toDate      != null && !toDate.isEmpty())      ps.setString(idx,   toDate);
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) list.add(mapAppointment(rs));
         } catch (SQLException e) { e.printStackTrace(); }
         return list;

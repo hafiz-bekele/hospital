@@ -122,6 +122,7 @@ public class MyAppointmentsPanel extends JPanel {
                 case "APPROVED":  approved++;  break;
                 case "REJECTED":  rejected++;  break;
                 case "CANCELLED": cancelled++; break;
+                default: break;
             }
         }
         totalLbl.setText("Total: " + total);

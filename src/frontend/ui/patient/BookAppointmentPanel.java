@@ -512,6 +512,16 @@ public class BookAppointmentPanel extends JPanel {
         if (doctor == null) { showMsg("Please select a doctor.", false); return; }
         if (sched  == null) { showMsg("No schedule available for this doctor.", false); return; }
 
+        // Prevent duplicate bookings for the same schedule slot
+        if (apptDAO.hasActiveBooking(patient.getId(), sched.getId())) {
+            showMsg("✘  You already have an active booking for this slot.", false);
+            JOptionPane.showMessageDialog(this,
+                "You already have a pending or approved appointment for this schedule.\n" +
+                "Please choose a different time slot or cancel your existing booking first.",
+                "Duplicate Booking", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         Appointment a = new Appointment();
         a.setPatientId(patient.getId());
         a.setDoctorId(doctor.getId());
