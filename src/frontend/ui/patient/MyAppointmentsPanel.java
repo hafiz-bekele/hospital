@@ -84,18 +84,22 @@ public class MyAppointmentsPanel extends JPanel {
 
         JButton viewBtn    = new JButton("👁  View Details");
         JButton cancelBtn  = new JButton("✘  Cancel Appointment");
+        JButton printBtn   = new JButton("🖨  Print Receipt");
         JButton refreshBtn = new JButton("↻  Refresh");
 
         styleBtn(cancelBtn,  new Color(160, 60, 60));
         styleBtn(viewBtn,    new Color(30, 100, 180));
+        styleBtn(printBtn,   new Color(34, 120, 80));
         styleBtn(refreshBtn, new Color(70, 70, 70));
 
         viewBtn.addActionListener(e    -> viewDetails());
         cancelBtn.addActionListener(e  -> cancelAppointment());
+        printBtn.addActionListener(e   -> printReceipt());
         refreshBtn.addActionListener(e -> refresh());
 
         btnPanel.add(viewBtn);
         btnPanel.add(cancelBtn);
+        btnPanel.add(printBtn);
         btnPanel.add(refreshBtn);
 
         add(statsBar,  BorderLayout.NORTH);
@@ -198,6 +202,27 @@ public class MyAppointmentsPanel extends JPanel {
         JLabel lbl = new JLabel(label); lbl.setFont(new Font("Arial", Font.BOLD, 13)); p.add(lbl, gbc);
         gbc.gridx = 1;
         JLabel val = new JLabel(value != null ? value : "—"); val.setFont(new Font("Arial", Font.PLAIN, 13)); p.add(val, gbc);
+    }
+
+    private void printReceipt() {
+        int row = table.getSelectedRow();
+        if (row < 0) { warn("Please select an appointment to print."); return; }
+
+        // Pull all data straight from the table row — no extra DB call needed
+        int    id       = (int)    tableModel.getValueAt(row, 0);
+        String doctor   = (String) tableModel.getValueAt(row, 1); // already "Dr. X"
+        String date     = (String) tableModel.getValueAt(row, 2);
+        String timeSlot = (String) tableModel.getValueAt(row, 3);
+        String reason   = (String) tableModel.getValueAt(row, 4);
+        String status   = (String) tableModel.getValueAt(row, 5);
+        String notes    = (String) tableModel.getValueAt(row, 6);
+
+        // Strip the "Dr. " prefix — AppointmentReceipt adds it back
+        String doctorName = doctor.startsWith("Dr. ") ? doctor.substring(4) : doctor;
+
+        AppointmentReceipt.print(this,
+            id, patient.getFullName(), doctorName,
+            date, timeSlot, reason, status, notes);
     }
 
     private void warn(String msg) {
