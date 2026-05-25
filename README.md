@@ -1,71 +1,15 @@
-# Role-Based Hospital Appointment Booking System
+# Hospital Management System
 
-## Tech Stack
-- **Frontend**: Java Swing & AWT
-- **Backend**: JDBC (MySQL)
-
-## Prerequisites
-- Java JDK 8+
-- MySQL Server
-- MySQL Connector/J JAR (`mysql-connector-j-x.x.x.jar`)
-
-## Setup
-
-### 1. Database
-Run the SQL script in MySQL:
-```sql
-source hospital_db.sql
-```
-Or import it via MySQL Workbench / phpMyAdmin.
-
-### 2. Configure DB Connection
-Edit `src/db/DBConnection.java`:
-```java
-private static final String USER = "root";
-private static final String PASSWORD = "your_mysql_password";
-```
-
-### 3. Compile
-Place `mysql-connector-j.jar` in `HospitalSystem/lib/`.
-
-```bash
-# From HospitalSystem/
-javac -cp "lib/mysql-connector-j.jar" -d out src/**/*.java src/Main.java
-```
-
-Or compile all at once:
-```bash
-javac -cp "lib/mysql-connector-j.jar" -d out \
-  src/db/DBConnection.java \
-  src/models/*.java \
-  src/dao/*.java \
-  src/ui/LoginFrame.java \
-  src/ui/RegisterFrame.java \
-  src/ui/patient/*.java \
-  src/ui/doctor/*.java \
-  src/ui/admin/*.java \
-  src/Main.java
-```
-
-### 4. Run
-```bash
-java -cp "out;lib/mysql-connector-j.jar" Main
-```
-On Linux/Mac use `:` instead of `;`.
-
-## Default Login
-| Role  | Username | Password |
-|-------|----------|----------|
-| Admin | admin    | admin123 |
+A comprehensive desktop application for managing hospital operations including patient registration, doctor appointments, and administrative tasks.
 
 ## Features
 
 ### Patient
-- Register a new account
-- View all available doctors
-- Book appointments with a doctor's schedule
+- Register a new account with validation
+- View all available doctors with live search
+- Book appointments with doctor schedules
 - Track appointment status (Pending / Approved / Rejected)
-- View medical notes added by doctor
+- View medical notes added by doctors
 
 ### Doctor
 - Login with credentials created by admin
@@ -79,3 +23,148 @@ On Linux/Mac use `:` instead of `;`.
 - Manage doctor schedules (date, time slots, max patients)
 - Approve / reject / manage all appointments
 - View all patients
+
+## Technology Stack
+
+- **Frontend**: Java Swing with modern UI design
+- **Backend**: Java JDBC for database operations
+- **Database**: MySQL (XAMPP)
+- **Java Version**: Java 21
+
+## Project Structure
+
+```
+HospitalSystem/
+├── src/
+│   ├── Main.java                    # Application entry point
+│   ├── backend/                     # Backend logic
+│   │   ├── db/                      # Database connection
+│   │   │   └── DBConnection.java
+│   │   ├── models/                  # Data models
+│   │   │   ├── User.java
+│   │   │   ├── Doctor.java
+│   │   │   ├── Appointment.java
+│   │   │   ├── Schedule.java
+│   │   │   └── Notification.java
+│   │   └── dao/                     # Data Access Objects
+│   │       ├── UserDAO.java
+│   │       ├── DoctorDAO.java
+│   │       ├── AppointmentDAO.java
+│   │       ├── ScheduleDAO.java
+│   │       └── NotificationDAO.java
+│   └── frontend/                    # Frontend UI
+│       └── ui/
+│           ├── LoginFrame.java
+│           ├── RegisterFrame.java
+│           ├── admin/               # Admin dashboard panels (8 files)
+│           │   ├── AdminDashboard.java
+│           │   ├── StatisticsPanel.java
+│           │   ├── ManageDoctorsPanel.java
+│           │   ├── ManageSchedulesPanel.java
+│           │   ├── ManageAppointmentsPanel.java
+│           │   ├── ViewPatientsPanel.java
+│           │   ├── SearchAppointmentsPanel.java
+│           │   └── ReportsPanel.java
+│           ├── doctor/              # Doctor dashboard panels (3 files)
+│           │   ├── DoctorDashboard.java
+│           │   ├── AppointmentsPanel.java
+│           │   └── DoctorProfilePanel.java
+│           ├── patient/             # Patient dashboard panels (4 files)
+│           │   ├── PatientDashboard.java
+│           │   ├── BookAppointmentPanel.java
+│           │   ├── MyAppointmentsPanel.java
+│           │   └── PatientProfilePanel.java
+│           └── common/              # Shared panels (2 files)
+│               ├── NotificationsPanel.java
+│               └── ChangePasswordPanel.java
+├── out/                             # Compiled classes
+├── mysql-connector-j-9.7.0/         # MySQL JDBC driver
+├── hospital_db.sql                  # Database schema
+├── compile.bat                      # Compilation script
+└── run.bat                          # Run script
+```
+
+## Setup Instructions
+
+### Prerequisites
+1. **Java 21** - Ensure Java is installed and `JAVA_HOME` is set
+2. **XAMPP** - For MySQL database server
+3. **MySQL Connector** - Already included in the project
+
+### Database Setup
+1. Start XAMPP and ensure MySQL is running
+2. Open phpMyAdmin (http://localhost/phpmyadmin)
+3. Create a new database named `hospital_db`
+4. Import the `hospital_db.sql` file
+
+### Running the Application
+
+#### Option 1: Using the run script
+```bash
+run.bat
+```
+
+#### Option 2: Manual compilation and run
+```bash
+# Compile
+compile.bat
+
+# Run
+java -cp "out;mysql-connector-j-9.7.0\mysql-connector-j-9.7.0\mysql-connector-j-9.7.0.jar" Main
+```
+
+## Default Login Credentials
+
+- **Admin**: `admin` / `admin123`
+- **Patients**: Register through the application
+- **Doctors**: Created by admin through the dashboard
+
+## Database Configuration
+
+The database connection is configured in `src/backend/db/DBConnection.java`:
+
+```java
+URL:      jdbc:mysql://localhost:3306/hospital_db
+USER:     root
+PASSWORD: (empty - XAMPP default)
+```
+
+## UI Features
+
+- Modern, clean interface with Segoe UI fonts
+- Color-coded dashboards:
+  - **Admin**: Purple accent
+  - **Doctor**: Teal accent
+  - **Patient**: Blue accent
+- Live search and filtering for doctors
+- Real-time form validation
+- Password strength indicator
+- Responsive table layouts
+
+## Development Notes
+
+- All UI components use Java Swing
+- Database operations use JDBC with prepared statements
+- Clean separation between frontend and backend
+- Role-based access control (ADMIN, DOCTOR, PATIENT)
+- Input validation on both client and server side
+
+## Troubleshooting
+
+### MySQL Connection Failed
+- Ensure XAMPP MySQL is running
+- Verify database name is `hospital_db`
+- Check username/password in `DBConnection.java`
+
+### Compilation Errors
+- Verify Java 21 is installed: `java -version`
+- Ensure MySQL connector JAR path is correct in `compile.bat`
+
+### Application Won't Start
+- Check if port 3306 is available
+- Verify database is imported correctly
+- Check console for error messages
+
+## License
+
+This is an educational project for learning Java desktop application development.

@@ -1,5 +1,4 @@
 @echo off
-set JAR=mysql-connector-j-9.7.0\mysql-connector-j-9.7.0\mysql-connector-j-9.7.0.jar
-echo Starting Hospital Appointment System...
-java -cp "out;%JAR%" Main
-pause
+echo Starting Hospital Management System...
+echo.
+java -cp "out;mysql-connector-j-9.7.0\mysql-connector-j-9.7.0\mysql-connector-j-9.7.0.jar" Main

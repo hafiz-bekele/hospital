@@ -7,36 +7,36 @@ if not exist out mkdir out
 
 javac -cp "%JAR%" -d out -sourcepath src ^
   src\Main.java ^
-  src\db\DBConnection.java ^
-  src\models\User.java ^
-  src\models\Doctor.java ^
-  src\models\Appointment.java ^
-  src\models\Schedule.java ^
-  src\models\Notification.java ^
-  src\dao\UserDAO.java ^
-  src\dao\DoctorDAO.java ^
-  src\dao\ScheduleDAO.java ^
-  src\dao\AppointmentDAO.java ^
-  src\dao\NotificationDAO.java ^
-  src\ui\LoginFrame.java ^
-  src\ui\RegisterFrame.java ^
-  src\ui\common\NotificationsPanel.java ^
-  src\ui\common\ChangePasswordPanel.java ^
-  src\ui\patient\PatientDashboard.java ^
-  src\ui\patient\BookAppointmentPanel.java ^
-  src\ui\patient\MyAppointmentsPanel.java ^
-  src\ui\patient\PatientProfilePanel.java ^
-  src\ui\doctor\DoctorDashboard.java ^
-  src\ui\doctor\AppointmentsPanel.java ^
-  src\ui\doctor\DoctorProfilePanel.java ^
-  src\ui\admin\AdminDashboard.java ^
-  src\ui\admin\StatisticsPanel.java ^
-  src\ui\admin\ManageDoctorsPanel.java ^
-  src\ui\admin\ManageSchedulesPanel.java ^
-  src\ui\admin\ManageAppointmentsPanel.java ^
-  src\ui\admin\ViewPatientsPanel.java ^
-  src\ui\admin\SearchAppointmentsPanel.java ^
-  src\ui\admin\ReportsPanel.java
+  src\backend\db\DBConnection.java ^
+  src\backend\models\User.java ^
+  src\backend\models\Doctor.java ^
+  src\backend\models\Appointment.java ^
+  src\backend\models\Schedule.java ^
+  src\backend\models\Notification.java ^
+  src\backend\dao\UserDAO.java ^
+  src\backend\dao\DoctorDAO.java ^
+  src\backend\dao\ScheduleDAO.java ^
+  src\backend\dao\AppointmentDAO.java ^
+  src\backend\dao\NotificationDAO.java ^
+  src\frontend\ui\LoginFrame.java ^
+  src\frontend\ui\RegisterFrame.java ^
+  src\frontend\ui\common\NotificationsPanel.java ^
+  src\frontend\ui\common\ChangePasswordPanel.java ^
+  src\frontend\ui\patient\PatientDashboard.java ^
+  src\frontend\ui\patient\BookAppointmentPanel.java ^
+  src\frontend\ui\patient\MyAppointmentsPanel.java ^
+  src\frontend\ui\patient\PatientProfilePanel.java ^
+  src\frontend\ui\doctor\DoctorDashboard.java ^
+  src\frontend\ui\doctor\AppointmentsPanel.java ^
+  src\frontend\ui\doctor\DoctorProfilePanel.java ^
+  src\frontend\ui\admin\AdminDashboard.java ^
+  src\frontend\ui\admin\StatisticsPanel.java ^
+  src\frontend\ui\admin\ManageDoctorsPanel.java ^
+  src\frontend\ui\admin\ManageSchedulesPanel.java ^
+  src\frontend\ui\admin\ManageAppointmentsPanel.java ^
+  src\frontend\ui\admin\ViewPatientsPanel.java ^
+  src\frontend\ui\admin\SearchAppointmentsPanel.java ^
+  src\frontend\ui\admin\ReportsPanel.java
 
 if %ERRORLEVEL% == 0 (
     echo.
