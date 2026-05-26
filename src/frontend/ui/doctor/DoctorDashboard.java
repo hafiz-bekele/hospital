@@ -37,7 +37,7 @@ public class DoctorDashboard extends JFrame {
 
     private JPanel buildHeader() {
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(new Color(6, 95, 70));    // deep teal
+        header.setBackground(new Color(6, 95, 70));
         header.setBorder(new EmptyBorder(0, 0, 0, 0));
 
         JPanel left = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -57,12 +57,11 @@ public class DoctorDashboard extends JFrame {
         namePanel.setOpaque(false);
         namePanel.setBorder(new EmptyBorder(10, 8, 10, 0));
 
-        String spec = doctor != null ? doctor.getSpecialization() : "Doctor";
         JLabel name = new JLabel("Dr. " + user.getFullName());
         name.setFont(new Font("Segoe UI", Font.BOLD, 14));
         name.setForeground(Color.WHITE);
 
-        JLabel role = new JLabel(spec);
+        JLabel role = new JLabel(doctor != null ? doctor.getSpecialization() : "Doctor");
         role.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         role.setForeground(new Color(167, 243, 208));
 
@@ -73,7 +72,7 @@ public class DoctorDashboard extends JFrame {
 
         JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 16, 12));
         right.setOpaque(false);
-        JButton logout = headerButton("⏻  Logout", new Color(220, 38, 38));
+        JButton logout = makeBtn("⏻  Logout", new Color(220, 38, 38));
         logout.addActionListener(e -> { new LoginFrame().setVisible(true); dispose(); });
         right.add(logout);
 
@@ -87,28 +86,26 @@ public class DoctorDashboard extends JFrame {
         tabs.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         tabs.setBackground(new Color(248, 250, 252));
 
-        if (doctor != null) {
-            AppointmentsPanel  apptPanel  = new AppointmentsPanel(doctor);
-            NotificationsPanel notifPanel = new NotificationsPanel(user);
-
-            tabs.addTab("📋   Appointments",    pad(apptPanel));
-            tabs.addTab("🔔   Notifications",   pad(notifPanel));
-            tabs.addTab("👤   My Profile",      pad(new DoctorProfilePanel(user, doctor)));
-            tabs.addTab("🔑   Change Password", pad(new ChangePasswordPanel(user)));
-
-            tabs.addChangeListener(e -> {
-                int i = tabs.getSelectedIndex();
-                if (i == 0) apptPanel.refresh();
-                if (i == 1) { notifPanel.refresh(); updateBadge(tabs, notifPanel, 1); }
-                updateBadge(tabs, notifPanel, 1);
-            });
-            updateBadge(tabs, notifPanel, 1);
-        } else {
-            JLabel err = new JLabel("Doctor profile not found. Contact admin.", SwingConstants.CENTER);
-            err.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-            err.setForeground(new Color(100, 116, 139));
-            tabs.addTab("Appointments", err);
+        if (doctor == null) {
+            tabs.addTab("Appointments", new JLabel("Doctor profile not found. Contact admin.", SwingConstants.CENTER));
+            return tabs;
         }
+
+        AppointmentsPanel  apptPanel  = new AppointmentsPanel(doctor);
+        NotificationsPanel notifPanel = new NotificationsPanel(user);
+
+        tabs.addTab("📋   Appointments",    pad(apptPanel));
+        tabs.addTab("🔔   Notifications",   pad(notifPanel));
+        tabs.addTab("👤   My Profile",      pad(new DoctorProfilePanel(user, doctor)));
+        tabs.addTab("🔑   Change Password", pad(new ChangePasswordPanel(user)));
+
+        tabs.addChangeListener(e -> {
+            int i = tabs.getSelectedIndex();
+            if (i == 0) apptPanel.refresh();
+            if (i == 1) { notifPanel.refresh(); updateBadge(tabs, notifPanel, 1); }
+            updateBadge(tabs, notifPanel, 1);
+        });
+        updateBadge(tabs, notifPanel, 1);
         return tabs;
     }
 
@@ -125,14 +122,11 @@ public class DoctorDashboard extends JFrame {
         tabs.setTitleAt(idx, n > 0 ? "🔔   Notifications (" + n + ")" : "🔔   Notifications");
     }
 
-    private JButton headerButton(String text, Color bg) {
+    private JButton makeBtn(String text, Color bg) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btn.setBackground(bg);
-        btn.setForeground(Color.WHITE);
-        btn.setFocusPainted(false);
-        btn.setOpaque(true);
-        btn.setBorderPainted(false);
+        btn.setBackground(bg); btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false); btn.setOpaque(true); btn.setBorderPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btn.setBorder(new EmptyBorder(7, 16, 7, 16));
         return btn;

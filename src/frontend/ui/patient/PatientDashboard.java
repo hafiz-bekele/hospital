@@ -33,7 +33,7 @@ public class PatientDashboard extends JFrame {
 
     private JPanel buildHeader() {
         JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(new Color(30, 64, 175));   // deep blue
+        header.setBackground(new Color(30, 64, 175));
         header.setBorder(new EmptyBorder(0, 0, 0, 0));
 
         JPanel left = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -68,7 +68,7 @@ public class PatientDashboard extends JFrame {
 
         JPanel right = new JPanel(new FlowLayout(FlowLayout.RIGHT, 16, 12));
         right.setOpaque(false);
-        JButton logout = headerButton("⏻  Logout", new Color(220, 38, 38));
+        JButton logout = makeBtn("⏻  Logout", new Color(220, 38, 38));
         logout.addActionListener(e -> { new LoginFrame().setVisible(true); dispose(); });
         right.add(logout);
 
@@ -115,14 +115,11 @@ public class PatientDashboard extends JFrame {
         tabs.setTitleAt(idx, n > 0 ? "🔔   Notifications (" + n + ")" : "🔔   Notifications");
     }
 
-    private JButton headerButton(String text, Color bg) {
+    private JButton makeBtn(String text, Color bg) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btn.setBackground(bg);
-        btn.setForeground(Color.WHITE);
-        btn.setFocusPainted(false);
-        btn.setOpaque(true);
-        btn.setBorderPainted(false);
+        btn.setBackground(bg); btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false); btn.setOpaque(true); btn.setBorderPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         btn.setBorder(new EmptyBorder(7, 16, 7, 16));
         return btn;
