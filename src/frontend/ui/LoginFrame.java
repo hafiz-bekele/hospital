@@ -39,6 +39,7 @@ public class LoginFrame extends JFrame {
         buildUI();
     }
 
+    // Create the login form UI
     private void buildUI() {
         JPanel root = new JPanel(new GridBagLayout());
         root.setBackground(BG);
@@ -113,6 +114,7 @@ public class LoginFrame extends JFrame {
         add(root);
     }
 
+    // Handle login button click - verify credentials and open appropriate dashboard
     private void doLogin() {
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword()).trim();
@@ -128,6 +130,7 @@ public class LoginFrame extends JFrame {
         }
     }
 
+    // Create a label for form fields
     public static JLabel labelFor(String text) {
         JLabel lbl = new JLabel(text);
         lbl.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -136,18 +139,21 @@ public class LoginFrame extends JFrame {
         return lbl;
     }
 
+    // Create a styled text field with border and focus effects
     public static JTextField styledField() {
         JTextField f = new JTextField();
         applyFieldStyle(f);
         return f;
     }
 
+    // Create a styled password field with border and focus effects
     public static JPasswordField styledPassword() {
         JPasswordField f = new JPasswordField();
         applyFieldStyle(f);
         return f;
     }
 
+    // Apply styling to text fields (border, padding, focus effects)
     private static void applyFieldStyle(JTextField f) {
         f.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         f.setForeground(TEXT); f.setBackground(new Color(248, 250, 252));
@@ -164,6 +170,7 @@ public class LoginFrame extends JFrame {
         });
     }
 
+    // Create a rounded button with hover effects
     public static JButton roundButton(String text, Color bg, Color fg) {
         JButton btn = new JButton(text) {
             @Override protected void paintComponent(Graphics g) {

@@ -23,6 +23,7 @@ public class PatientDashboard extends JFrame {
         buildUI();
     }
 
+    // Create the patient dashboard UI with header and tabs
     private void buildUI() {
         JPanel root = new JPanel(new BorderLayout());
         root.setBackground(new Color(241, 245, 249));
@@ -31,6 +32,7 @@ public class PatientDashboard extends JFrame {
         add(root);
     }
 
+    // Create the top header bar with patient name and logout button
     private JPanel buildHeader() {
         JPanel header = new JPanel(new BorderLayout());
         header.setBackground(new Color(30, 64, 175));
@@ -77,6 +79,7 @@ public class PatientDashboard extends JFrame {
         return header;
     }
 
+    // Create tabs for booking, appointments, notifications, profile, and password
     private JTabbedPane buildTabs() {
         JTabbedPane tabs = new JTabbedPane(JTabbedPane.LEFT);
         tabs.setFont(new Font("Segoe UI", Font.PLAIN, 13));
@@ -102,6 +105,7 @@ public class PatientDashboard extends JFrame {
         return tabs;
     }
 
+    // Wrap a component in a padded panel
     private JPanel pad(JComponent c) {
         JPanel p = new JPanel(new BorderLayout());
         p.setBackground(Color.WHITE);
@@ -110,11 +114,13 @@ public class PatientDashboard extends JFrame {
         return p;
     }
 
+    // Update notification badge count on tab title
     private void updateBadge(JTabbedPane tabs, NotificationsPanel np, int idx) {
         int n = np.getUnreadCount();
         tabs.setTitleAt(idx, n > 0 ? "🔔   Notifications (" + n + ")" : "🔔   Notifications");
     }
 
+    // Create a styled button with custom background color
     private JButton makeBtn(String text, Color bg) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("Segoe UI", Font.BOLD, 12));

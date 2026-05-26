@@ -9,6 +9,7 @@ import java.util.List;
 
 public class UserDAO {
 
+    // Check if username and password match, return user if valid
     public User login(String username, String password) {
         String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
@@ -20,6 +21,7 @@ public class UserDAO {
         return null;
     }
 
+    // Create a new user account (for patients)
     public boolean register(User user) {
         String sql = "INSERT INTO users (username, password, role, full_name, email, phone) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
@@ -31,6 +33,7 @@ public class UserDAO {
         return false;
     }
 
+    // Check if a username is already taken
     public boolean usernameExists(String username) {
         String sql = "SELECT id FROM users WHERE username = ?";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
@@ -40,6 +43,7 @@ public class UserDAO {
         return false;
     }
 
+    // Get all users with PATIENT role
     public List<User> getAllPatients() {
         List<User> list = new ArrayList<>();
         String sql = "SELECT * FROM users WHERE role = 'PATIENT' ORDER BY full_name";
@@ -50,6 +54,7 @@ public class UserDAO {
         return list;
     }
 
+    // Update user's profile information (name, email, phone)
     public boolean updateProfile(int userId, String fullName, String email, String phone) {
         String sql = "UPDATE users SET full_name = ?, email = ?, phone = ? WHERE id = ?";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
@@ -60,6 +65,7 @@ public class UserDAO {
         return false;
     }
 
+    // Change user's password (verifies old password first)
     public boolean changePassword(int userId, String oldPassword, String newPassword) {
         String check = "SELECT id FROM users WHERE id = ? AND password = ?";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(check)) {
@@ -75,6 +81,7 @@ public class UserDAO {
         return false;
     }
 
+    // Get total number of patients in the system
     public int getTotalPatients() {
         String sql = "SELECT COUNT(*) FROM users WHERE role = 'PATIENT'";
         try (Statement st = DBConnection.getConnection().createStatement()) {
@@ -84,6 +91,7 @@ public class UserDAO {
         return 0;
     }
 
+    // Convert database row into User object
     private User mapUser(ResultSet rs) throws SQLException {
         User u = new User();
         u.setId(rs.getInt("id"));           u.setUsername(rs.getString("username"));

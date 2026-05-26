@@ -14,6 +14,7 @@ public class ScheduleDAO {
 
     public String getLastError() { return lastError; }
 
+    // Add a new schedule slot for a doctor
     public boolean addSchedule(Schedule s) {
         lastError = "";
         String sql = "INSERT INTO schedules (doctor_id, available_date, start_time, end_time, max_patients) VALUES (?, ?, ?, ?, ?)";
@@ -31,6 +32,7 @@ public class ScheduleDAO {
         return false;
     }
 
+    // Delete a schedule slot
     public boolean deleteSchedule(int scheduleId) {
         String sql = "DELETE FROM schedules WHERE id = ?";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
@@ -40,6 +42,7 @@ public class ScheduleDAO {
         return false;
     }
 
+    // Get all schedules in the system (used by admin)
     public List<Schedule> getAllSchedules() {
         List<Schedule> list = new ArrayList<>();
         String sql = "SELECT s.*, u.full_name FROM schedules s " +
@@ -56,6 +59,7 @@ public class ScheduleDAO {
         return list;
     }
 
+    // Get available schedules for a specific doctor (only today and future dates)
     public List<Schedule> getSchedulesByDoctor(int doctorId) {
         List<Schedule> list = new ArrayList<>();
         // Only return today's and future schedules — past slots are not bookable
@@ -76,6 +80,7 @@ public class ScheduleDAO {
         return list;
     }
 
+    // Convert database row into Schedule object
     private Schedule mapSchedule(ResultSet rs) throws SQLException {
         Schedule s = new Schedule();
         s.setId(rs.getInt("id"));                   s.setDoctorId(rs.getInt("doctor_id"));

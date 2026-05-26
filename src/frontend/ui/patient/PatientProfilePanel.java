@@ -45,6 +45,7 @@ public class PatientProfilePanel extends JPanel {
         add(wrapper, BorderLayout.CENTER);
     }
 
+    // Add a row to the profile card (label + value)
     private void addRow(JPanel p, GridBagConstraints g, int row, String label, String value) {
         g.gridx = 0; g.gridy = row; g.weightx = 0;
         JLabel lbl = new JLabel(label);
@@ -57,6 +58,7 @@ public class PatientProfilePanel extends JPanel {
         p.add(val, g);
     }
 
+    // Get first letters of name for avatar (e.g. "John Doe" -> "JD")
     private String initials(String name) {
         if (name == null || name.isEmpty()) return "?";
         String[] parts = name.trim().split("\\s+");

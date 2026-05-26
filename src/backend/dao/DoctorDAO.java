@@ -10,6 +10,7 @@ import java.util.List;
 
 public class DoctorDAO {
 
+    // Add a new doctor (creates user account + doctor profile in one transaction)
     public boolean addDoctor(User user, String specialization, String qualification, int experience) {
         Connection conn = DBConnection.getConnection();
         try {
@@ -38,6 +39,7 @@ public class DoctorDAO {
         return false;
     }
 
+    // Delete a doctor (also deletes their user account due to CASCADE)
     public boolean deleteDoctor(int doctorId) {
         String sql = "DELETE FROM users WHERE id = (SELECT user_id FROM doctors WHERE id = ?)";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
@@ -47,6 +49,7 @@ public class DoctorDAO {
         return false;
     }
 
+    // Get all doctors in the system
     public List<Doctor> getAllDoctors() {
         List<Doctor> list = new ArrayList<>();
         String sql = "SELECT d.id, d.user_id, u.full_name, d.specialization, d.qualification, d.experience_years " +
@@ -58,6 +61,7 @@ public class DoctorDAO {
         return list;
     }
 
+    // Find doctor profile by their user ID (used when doctor logs in)
     public Doctor getDoctorByUserId(int userId) {
         String sql = "SELECT d.id, d.user_id, u.full_name, d.specialization, d.qualification, d.experience_years " +
                      "FROM doctors d JOIN users u ON d.user_id = u.id WHERE d.user_id = ?";
@@ -69,6 +73,7 @@ public class DoctorDAO {
         return null;
     }
 
+    // Get user account details for a specific doctor
     public User getUserByDoctorId(int doctorId) {
         String sql = "SELECT u.* FROM users u JOIN doctors d ON d.user_id = u.id WHERE d.id = ?";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
@@ -86,6 +91,7 @@ public class DoctorDAO {
         return null;
     }
 
+    // Update doctor's user account and profile information
     public boolean updateDoctor(int doctorId, String fullName, String username, String password,
                                 String email, String phone, String spec, String qual, int exp) {
         Connection conn = DBConnection.getConnection();
@@ -110,6 +116,7 @@ public class DoctorDAO {
         return false;
     }
 
+    // Get total number of doctors in the system
     public int getTotalDoctors() {
         String sql = "SELECT COUNT(*) FROM doctors";
         try (Statement st = DBConnection.getConnection().createStatement()) {
@@ -119,6 +126,7 @@ public class DoctorDAO {
         return 0;
     }
 
+    // Convert database row into Doctor object
     private Doctor mapDoctor(ResultSet rs) throws SQLException {
         return new Doctor(rs.getInt("id"), rs.getInt("user_id"), rs.getString("full_name"),
             rs.getString("specialization"), rs.getString("qualification"), rs.getInt("experience_years"));

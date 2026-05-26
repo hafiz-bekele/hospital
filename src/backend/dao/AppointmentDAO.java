@@ -17,6 +17,7 @@ public class AppointmentDAO {
         "JOIN users du ON d.user_id = du.id " +
         "JOIN schedules s ON a.schedule_id = s.id ";
 
+    // Save a new appointment to the database
     public boolean bookAppointment(Appointment a) {
         String sql = "INSERT INTO appointments (patient_id, doctor_id, schedule_id, appointment_date, reason) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
@@ -43,6 +44,7 @@ public class AppointmentDAO {
         return false;
     }
 
+    // Change the status of an appointment (PENDING, CONFIRMED, COMPLETED, etc.)
     public boolean updateStatus(int appointmentId, String status) {
         String sql = "UPDATE appointments SET status = ? WHERE id = ?";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
@@ -52,6 +54,7 @@ public class AppointmentDAO {
         return false;
     }
 
+    // Cancel an appointment (only works if status is still PENDING)
     public boolean cancelAppointment(int appointmentId) {
         String sql = "UPDATE appointments SET status = 'CANCELLED' WHERE id = ? AND status = 'PENDING'";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
@@ -61,6 +64,7 @@ public class AppointmentDAO {
         return false;
     }
 
+    // Add or update medical notes for an appointment (used by doctors)
     public boolean updateMedicalNotes(int appointmentId, String notes) {
         String sql = "UPDATE appointments SET medical_notes = ? WHERE id = ?";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
@@ -70,14 +74,17 @@ public class AppointmentDAO {
         return false;
     }
 
+    // Get all appointments for a specific patient
     public List<Appointment> getAppointmentsByPatient(int patientId) {
         return queryById(BASE_SQL + "WHERE a.patient_id = ? ORDER BY a.appointment_date DESC", patientId);
     }
 
+    // Get all appointments for a specific doctor
     public List<Appointment> getAppointmentsByDoctor(int doctorId) {
         return queryById(BASE_SQL + "WHERE a.doctor_id = ? ORDER BY a.appointment_date DESC", doctorId);
     }
 
+    // Get doctor's appointments with optional filters (status, date range)
     public List<Appointment> getAppointmentsByDoctorFiltered(int doctorId, String status, String fromDate, String toDate) {
         List<Appointment> list = new ArrayList<>();
         // Build query with placeholders only — never concatenate user input into SQL
@@ -98,6 +105,7 @@ public class AppointmentDAO {
         return list;
     }
 
+    // Get all appointments in the system (used by admin)
     public List<Appointment> getAllAppointments() {
         List<Appointment> list = new ArrayList<>();
         try (Statement st = DBConnection.getConnection().createStatement()) {
@@ -107,6 +115,7 @@ public class AppointmentDAO {
         return list;
     }
 
+    // Search appointments by patient name, doctor name, status, and date range
     public List<Appointment> searchAppointments(String patientName, String doctorName, String status, String fromDate, String toDate) {
         List<Appointment> list = new ArrayList<>();
         // Use ? placeholders for all user-supplied values to prevent SQL injection
@@ -130,6 +139,7 @@ public class AppointmentDAO {
         return list;
     }
 
+    // Get appointments within a specific date range (for reports)
     public List<Appointment> getAppointmentsByDateRange(String fromDate, String toDate) {
         List<Appointment> list = new ArrayList<>();
         String sql = BASE_SQL + "WHERE a.appointment_date BETWEEN ? AND ? ORDER BY a.appointment_date";
@@ -141,6 +151,7 @@ public class AppointmentDAO {
         return list;
     }
 
+    // Get appointment count per doctor (for statistics)
     public List<String[]> getAppointmentsPerDoctor() {
         List<String[]> result = new ArrayList<>();
         String sql = "SELECT u.full_name, COUNT(a.id) as cnt FROM appointments a " +
@@ -153,6 +164,7 @@ public class AppointmentDAO {
         return result;
     }
 
+    // Get appointment count per month for the last 12 months
     public List<String[]> getMonthlyStats() {
         List<String[]> result = new ArrayList<>();
         String sql = "SELECT DATE_FORMAT(appointment_date,'%Y-%m') as month, COUNT(*) as cnt " +
@@ -164,6 +176,7 @@ public class AppointmentDAO {
         return result;
     }
 
+    // Count how many appointments have a specific status
     public int countByStatus(String status) {
         String sql = "SELECT COUNT(*) FROM appointments WHERE status = ?";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
@@ -174,6 +187,7 @@ public class AppointmentDAO {
         return 0;
     }
 
+    // Get total number of appointments in the system
     public int getTotalAppointments() {
         String sql = "SELECT COUNT(*) FROM appointments";
         try (Statement st = DBConnection.getConnection().createStatement()) {
@@ -183,6 +197,7 @@ public class AppointmentDAO {
         return 0;
     }
 
+    // Helper method to run queries that filter by a single ID
     private List<Appointment> queryById(String sql, int id) {
         List<Appointment> list = new ArrayList<>();
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
@@ -193,6 +208,7 @@ public class AppointmentDAO {
         return list;
     }
 
+    // Convert database row into Appointment object
     private Appointment mapAppointment(ResultSet rs) throws SQLException {
         Appointment a = new Appointment();
         a.setId(rs.getInt("id"));                       a.setPatientId(rs.getInt("patient_id"));

@@ -48,6 +48,7 @@ public class DoctorProfilePanel extends JPanel {
         add(wrapper, BorderLayout.CENTER);
     }
 
+    // Add a row to the profile card (label + value)
     private void addRow(JPanel p, GridBagConstraints g, int row, String label, String value) {
         g.gridx = 0; g.gridy = row; g.weightx = 0;
         JLabel lbl = new JLabel(label);

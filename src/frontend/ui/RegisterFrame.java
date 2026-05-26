@@ -31,6 +31,7 @@ public class RegisterFrame extends JFrame {
         buildUI();
     }
 
+    // Create the registration form UI
     private void buildUI() {
         JPanel root = new JPanel(new BorderLayout());
         root.setBackground(BG);
@@ -110,6 +111,7 @@ public class RegisterFrame extends JFrame {
 
     // ── Helpers ──────────────────────────────────────────────────
 
+    // Add a form row (label + field + optional hint)
     private void addRow(JPanel card, String label, JComponent field, JLabel hint) {
         card.add(labelFor(label));
         card.add(Box.createVerticalStrut(4));
@@ -121,6 +123,7 @@ public class RegisterFrame extends JFrame {
         card.add(Box.createVerticalStrut(14));
     }
 
+    // Create a hint label (small, italic, muted text)
     private JLabel hintLabel(String text) {
         JLabel lbl = new JLabel(text);
         lbl.setFont(new Font("Segoe UI", Font.ITALIC, 11));
@@ -129,6 +132,7 @@ public class RegisterFrame extends JFrame {
         return lbl;
     }
 
+    // Create a document listener that runs a function when text changes
     private DocumentListener docListener(Runnable r) {
         return new DocumentListener() {
             public void insertUpdate(DocumentEvent e)  { r.run(); }
@@ -139,6 +143,7 @@ public class RegisterFrame extends JFrame {
 
     // ── Live validation ──────────────────────────────────────────
 
+    // Check if username is valid (starts with @ and at least 3 chars)
     private void validateUsername() {
         String val = usernameField.getText().trim();
         if (val.isEmpty()) {
@@ -156,6 +161,7 @@ public class RegisterFrame extends JFrame {
         }
     }
 
+    // Update password strength bar based on password complexity
     private void updateStrengthBar() {
         String pass = new String(passwordField.getPassword());
         if (pass.isEmpty()) {
@@ -175,6 +181,7 @@ public class RegisterFrame extends JFrame {
         passwordStrengthLbl.setForeground(colors[score]);
     }
 
+    // Check if password and confirm password match
     private void validateConfirm() {
         String pass    = new String(passwordField.getPassword());
         String confirm = new String(confirmField.getPassword());
@@ -189,6 +196,7 @@ public class RegisterFrame extends JFrame {
         }
     }
 
+    // Calculate password strength score (0-5 based on complexity)
     private int passwordScore(String p) {
         int s = 0;
         if (p.length() >= 8)                                          s++;
@@ -201,6 +209,7 @@ public class RegisterFrame extends JFrame {
 
     // ── Register action ──────────────────────────────────────────
 
+    // Handle register button click - validate and create new patient account
     private void doRegister() {
         String name     = nameField.getText().trim();
         String username = usernameField.getText().trim();
@@ -242,6 +251,7 @@ public class RegisterFrame extends JFrame {
         }
     }
 
+    // Show error message dialog
     private void showError(String msg) {
         JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.WARNING_MESSAGE);
     }
