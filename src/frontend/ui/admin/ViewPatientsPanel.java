@@ -8,6 +8,7 @@ import backend.models.User;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.Window;
 import java.util.List;
 
 public class ViewPatientsPanel extends JPanel {

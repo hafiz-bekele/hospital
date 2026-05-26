@@ -71,25 +71,30 @@ public class ManageSchedulesPanel extends JPanel {
     }
 
     private void showAddScheduleDialog() {
+        // Always use the top-level JFrame as dialog parent.
+        // Using 'this' (a JPanel inside CardLayout) can cause dialogs to
+        // appear behind the main window or not appear at all.
+        Frame owner = (Frame) SwingUtilities.getWindowAncestor(this);
+
         List<Doctor> doctors = doctorDAO.getAllDoctors();
         if (doctors.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No doctors available. Add doctors first.", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(owner,
+                    "No doctors available. Add a doctor first.",
+                    "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         JComboBox<Doctor> doctorCombo = new JComboBox<>(doctors.toArray(new Doctor[0]));
 
-        // Default to today's date so admin doesn't accidentally enter a past date
         String today = LocalDate.now().toString();
         JTextField dateField  = new JTextField(today, 12);
         JTextField startField = new JTextField("09:00", 8);
         JTextField endField   = new JTextField("17:00", 8);
         JTextField maxField   = new JTextField("10", 5);
 
-        // Small hint labels so the format is obvious
         JLabel dateHint  = hint("Format: YYYY-MM-DD  (e.g. " + today + ")");
-        JLabel timeHint  = hint("Format: HH:MM  (24-hour, e.g. 09:00)");
-        JLabel timeHint2 = hint("Format: HH:MM  (24-hour, e.g. 17:00)");
+        JLabel timeHint  = hint("Format: HH:MM  24-hour  (e.g. 09:00)");
+        JLabel timeHint2 = hint("Format: HH:MM  24-hour  (e.g. 17:00)");
 
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
@@ -98,38 +103,40 @@ public class ManageSchedulesPanel extends JPanel {
         g.fill = GridBagConstraints.HORIZONTAL;
 
         int r = 0;
-        addFormRow(panel, g, r++, "Doctor:",              doctorCombo, null);
-        addFormRow(panel, g, r++, "Date (YYYY-MM-DD):",   dateField,   dateHint);
-        addFormRow(panel, g, r++, "Start Time (HH:MM):",  startField,  timeHint);
-        addFormRow(panel, g, r++, "End Time (HH:MM):",    endField,    timeHint2);
-        addFormRow(panel, g, r,   "Max Patients:",         maxField,    null);
+        addFormRow(panel, g, r++, "Doctor:",             doctorCombo, null);
+        addFormRow(panel, g, r++, "Date (YYYY-MM-DD):",  dateField,   dateHint);
+        addFormRow(panel, g, r++, "Start Time (HH:MM):", startField,  timeHint);
+        addFormRow(panel, g, r++, "End Time (HH:MM):",   endField,    timeHint2);
+        addFormRow(panel, g, r,   "Max Patients:",        maxField,    null);
 
-        int result = JOptionPane.showConfirmDialog(this, panel,
+        int result = JOptionPane.showConfirmDialog(owner, panel,
                 "Add Schedule", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result != JOptionPane.OK_OPTION) return;
 
-        // ── Validate inputs before hitting the DB ─────────────────
+        // ── Validate ──────────────────────────────────────────────
         String date  = dateField.getText().trim();
         String start = startField.getText().trim();
         String end   = endField.getText().trim();
 
         if (date.isEmpty() || start.isEmpty() || end.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Date, start time, and end time are required.",
+            JOptionPane.showMessageDialog(owner, "Date, start time, and end time are required.",
                     "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (!date.matches("\\d{4}-\\d{2}-\\d{2}")) {
-            JOptionPane.showMessageDialog(this, "Date must be in YYYY-MM-DD format.\nExample: " + today,
+            JOptionPane.showMessageDialog(owner,
+                    "Date must be in YYYY-MM-DD format.\nExample: " + today,
                     "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (!start.matches("\\d{2}:\\d{2}") || !end.matches("\\d{2}:\\d{2}")) {
-            JOptionPane.showMessageDialog(this, "Times must be in HH:MM format.\nExample: 09:00",
+            JOptionPane.showMessageDialog(owner,
+                    "Times must be in HH:MM format.\nExample: 09:00",
                     "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (start.compareTo(end) >= 0) {
-            JOptionPane.showMessageDialog(this, "Start time must be before end time.",
+            JOptionPane.showMessageDialog(owner, "Start time must be before end time.",
                     "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -149,17 +156,16 @@ public class ManageSchedulesPanel extends JPanel {
         s.setMaxPatients(max);
 
         if (scheduleDAO.addSchedule(s)) {
-            JOptionPane.showMessageDialog(this,
-                    "Schedule added successfully!\n\n" +
+            JOptionPane.showMessageDialog(owner,
+                    "Schedule added!\n\n" +
                     "Doctor : " + doctor.getFullName() + "\n" +
                     "Date   : " + date + "\n" +
                     "Time   : " + start + " – " + end,
                     "Success", JOptionPane.INFORMATION_MESSAGE);
             loadSchedules();
         } else {
-            // Show the actual DB error so it's clear what went wrong
             String err = scheduleDAO.getLastError();
-            JOptionPane.showMessageDialog(this,
+            JOptionPane.showMessageDialog(owner,
                     "Failed to add schedule.\n\n" +
                     (err.isEmpty() ? "Check that MySQL is running." : "Error: " + err),
                     "Error", JOptionPane.ERROR_MESSAGE);
@@ -193,18 +199,19 @@ public class ManageSchedulesPanel extends JPanel {
 
     private void deleteSchedule() {
         int row = table.getSelectedRow();
+        Frame owner = (Frame) SwingUtilities.getWindowAncestor(this);
         if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Please select a schedule.", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(owner, "Please select a schedule.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         int id = (int) tableModel.getValueAt(row, 0);
-        int confirm = JOptionPane.showConfirmDialog(this, "Delete this schedule?", "Confirm", JOptionPane.YES_NO_OPTION);
+        int confirm = JOptionPane.showConfirmDialog(owner, "Delete this schedule?", "Confirm", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             if (scheduleDAO.deleteSchedule(id)) {
-                JOptionPane.showMessageDialog(this, "Schedule deleted.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(owner, "Schedule deleted.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 loadSchedules();
             } else {
-                JOptionPane.showMessageDialog(this, "Failed to delete schedule.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(owner, "Failed to delete schedule.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

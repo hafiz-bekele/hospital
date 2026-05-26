@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
+import java.awt.Window;
 
 public class ManageDoctorsPanel extends JPanel {
 
@@ -103,7 +104,8 @@ public class ManageDoctorsPanel extends JPanel {
         panel.add(new JLabel("Qualification:"));    panel.add(qualField);
         panel.add(new JLabel("Experience (yrs):")); panel.add(expField);
 
-        int result = JOptionPane.showConfirmDialog(this, panel, "Add New Doctor",
+        Window win = SwingUtilities.getWindowAncestor(this);
+        int result = JOptionPane.showConfirmDialog(win, panel, "Add New Doctor",
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result != JOptionPane.OK_OPTION) return;
 
@@ -113,12 +115,12 @@ public class ManageDoctorsPanel extends JPanel {
         String spec     = specField.getText().trim();
 
         if (name.isEmpty() || username.isEmpty() || password.isEmpty() || spec.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Name, username, password, and specialization are required.",
+            JOptionPane.showMessageDialog(win, "Name, username, password, and specialization are required.",
                     "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         if (userDAO.usernameExists(username)) {
-            JOptionPane.showMessageDialog(this, "Username already exists.", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(win, "Username already exists.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -133,10 +135,10 @@ public class ManageDoctorsPanel extends JPanel {
         user.setPhone(phoneField.getText().trim());
 
         if (doctorDAO.addDoctor(user, spec, qualField.getText().trim(), exp)) {
-            JOptionPane.showMessageDialog(this, "Doctor added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(win, "Doctor added successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             loadDoctors();
         } else {
-            JOptionPane.showMessageDialog(this, "Failed to add doctor.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(win, "Failed to add doctor.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -145,7 +147,8 @@ public class ManageDoctorsPanel extends JPanel {
     private void showEditDoctorDialog() {
         int row = table.getSelectedRow();
         if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Please select a doctor to edit.", "Warning", JOptionPane.WARNING_MESSAGE);
+            Window win = SwingUtilities.getWindowAncestor(this);
+            JOptionPane.showMessageDialog(win, "Please select a doctor to edit.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -155,7 +158,8 @@ public class ManageDoctorsPanel extends JPanel {
         Doctor doctor = doctors.stream().filter(d -> d.getId() == doctorId).findFirst().orElse(null);
 
         if (user == null || doctor == null) {
-            JOptionPane.showMessageDialog(this, "Could not load doctor data.", "Error", JOptionPane.ERROR_MESSAGE);
+            Window win = SwingUtilities.getWindowAncestor(this);
+            JOptionPane.showMessageDialog(win, "Could not load doctor data.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -195,7 +199,8 @@ public class ManageDoctorsPanel extends JPanel {
         addRow(panel, gbc, r++, "Qualification:",    qualField);
         addRow(panel, gbc, r,   "Experience (yrs):", expField);
 
-        int result = JOptionPane.showConfirmDialog(this, panel,
+        Window win = SwingUtilities.getWindowAncestor(this);
+        int result = JOptionPane.showConfirmDialog(win, panel,
                 "Edit Doctor — Dr. " + user.getFullName(),
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (result != JOptionPane.OK_OPTION) return;
@@ -206,14 +211,14 @@ public class ManageDoctorsPanel extends JPanel {
         String newSpec     = specField.getText().trim();
 
         if (newName.isEmpty() || newUsername.isEmpty() || newPassword.isEmpty() || newSpec.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Name, username, password, and specialization are required.",
+            JOptionPane.showMessageDialog(win, "Name, username, password, and specialization are required.",
                     "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         // Check username uniqueness only if it changed
         if (!newUsername.equals(user.getUsername()) && userDAO.usernameExists(newUsername)) {
-            JOptionPane.showMessageDialog(this, "Username already taken by another user.",
+            JOptionPane.showMessageDialog(win, "Username already taken by another user.",
                     "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -224,10 +229,10 @@ public class ManageDoctorsPanel extends JPanel {
         if (doctorDAO.updateDoctor(doctorId, newName, newUsername, newPassword,
                 emailField.getText().trim(), phoneField.getText().trim(),
                 newSpec, qualField.getText().trim(), exp)) {
-            JOptionPane.showMessageDialog(this, "Doctor updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(win, "Doctor updated successfully.", "Success", JOptionPane.INFORMATION_MESSAGE);
             loadDoctors();
         } else {
-            JOptionPane.showMessageDialog(this, "Failed to update doctor.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(win, "Failed to update doctor.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -236,7 +241,8 @@ public class ManageDoctorsPanel extends JPanel {
     private void showCredentials() {
         int row = table.getSelectedRow();
         if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Please select a doctor to view credentials.",
+            Window win = SwingUtilities.getWindowAncestor(this);
+            JOptionPane.showMessageDialog(win, "Please select a doctor to view credentials.",
                     "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -245,7 +251,8 @@ public class ManageDoctorsPanel extends JPanel {
         User user    = doctorDAO.getUserByDoctorId(doctorId);
 
         if (user == null) {
-            JOptionPane.showMessageDialog(this, "Could not load credentials.", "Error", JOptionPane.ERROR_MESSAGE);
+            Window win = SwingUtilities.getWindowAncestor(this);
+            JOptionPane.showMessageDialog(win, "Could not load credentials.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -286,7 +293,8 @@ public class ManageDoctorsPanel extends JPanel {
         addInfoRow(panel, gbc, r++, "Email:", user.getEmail() != null ? user.getEmail() : "—");
         addInfoRow(panel, gbc, r,   "Phone:", user.getPhone() != null ? user.getPhone() : "—");
 
-        JOptionPane.showMessageDialog(this, panel,
+        Window win = SwingUtilities.getWindowAncestor(this);
+        JOptionPane.showMessageDialog(win, panel,
                 "Credentials — Dr. " + user.getFullName(), JOptionPane.PLAIN_MESSAGE);
     }
 
@@ -295,19 +303,21 @@ public class ManageDoctorsPanel extends JPanel {
     private void deleteDoctor() {
         int row = table.getSelectedRow();
         if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Please select a doctor to delete.", "Warning", JOptionPane.WARNING_MESSAGE);
+            Window win = SwingUtilities.getWindowAncestor(this);
+            JOptionPane.showMessageDialog(win, "Please select a doctor to delete.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         int id = (int) tableModel.getValueAt(row, 0);
         String name = (String) tableModel.getValueAt(row, 1);
-        int confirm = JOptionPane.showConfirmDialog(this, "Delete Dr. " + name + "?",
+        Window win = SwingUtilities.getWindowAncestor(this);
+        int confirm = JOptionPane.showConfirmDialog(win, "Delete Dr. " + name + "?",
                 "Confirm Delete", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             if (doctorDAO.deleteDoctor(id)) {
-                JOptionPane.showMessageDialog(this, "Doctor deleted.", "Success", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(win, "Doctor deleted.", "Success", JOptionPane.INFORMATION_MESSAGE);
                 loadDoctors();
             } else {
-                JOptionPane.showMessageDialog(this, "Failed to delete doctor.", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(win, "Failed to delete doctor.", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

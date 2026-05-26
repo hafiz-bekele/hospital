@@ -31,38 +31,49 @@ public class DBConnection {
     private static Connection connection = null;
 
     /**
-     * Get the database connection (creates it if it doesn't exist yet)
-     * 
-     * This method is smart - it checks if we already have a connection.
-     * If yes, it returns the existing one. If no, it creates a new one.
-     * 
-     * @return Connection object to interact with the database
+     * Get the database connection (creates it if it doesn't exist yet).
+     *
+     * Returns null if the connection cannot be established — callers
+     * should handle null gracefully (all DAOs use try-with-resources
+     * which will throw NullPointerException if this returns null, so
+     * we show a clear one-time dialog instead of a cryptic stack trace).
      */
     public static Connection getConnection() {
         try {
-            // Check if we need to create a new connection
-            // (either we don't have one, or the old one got closed/timed out)
+            // Reconnect if we don't have a connection, it was closed, or it timed out
             if (connection == null || connection.isClosed() || !connection.isValid(2)) {
-                
-                // Step 1: Load the MySQL driver (tells Java how to talk to MySQL)
                 Class.forName("com.mysql.cj.jdbc.Driver");
-                
-                // Step 2: Actually connect to the database
                 connection = DriverManager.getConnection(URL, USER, PASSWORD);
-                
                 System.out.println("✓ Connected to database successfully!");
             }
         } catch (ClassNotFoundException e) {
-            // Oops! MySQL driver not found - did you include the JAR file?
             System.err.println("❌ MySQL Driver not found: " + e.getMessage());
             System.err.println("   Make sure mysql-connector-j.jar is in your classpath!");
+            showConnectionError("MySQL driver not found.\nMake sure the mysql-connector JAR is on the classpath.");
         } catch (SQLException e) {
-            // Database connection failed - check your credentials and if MySQL is running
             System.err.println("❌ Database connection failed: " + e.getMessage());
             System.err.println("   Is MySQL running? Check XAMPP or your MySQL server.");
+            showConnectionError("Cannot connect to the database.\n\n" +
+                "Please make sure:\n" +
+                "  1. XAMPP is open and MySQL is started\n" +
+                "  2. The database 'hospital_db' exists\n\n" +
+                "Error: " + e.getMessage());
         }
-        
         return connection;
+    }
+
+    /** Shows a one-time error dialog on the EDT so the user knows what went wrong. */
+    private static void showConnectionError(String message) {
+        // Only show if we're in a GUI context (Swing is available)
+        try {
+            javax.swing.SwingUtilities.invokeLater(() ->
+                javax.swing.JOptionPane.showMessageDialog(null,
+                    message, "Database Connection Error",
+                    javax.swing.JOptionPane.ERROR_MESSAGE)
+            );
+        } catch (Exception ignored) {
+            // Headless environment — error already printed to stderr above
+        }
     }
 
     /**

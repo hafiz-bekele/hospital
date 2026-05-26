@@ -116,10 +116,13 @@ public class AppointmentReceipt implements Printable {
     /**
      * Called by the printer for each page.
      * We only have one page, so we return NO_SUCH_PAGE for page > 0.
+     * NOTE: rowCount must be reset each time print() is called because
+     * the printer may call this method more than once (e.g. preview + print).
      */
     @Override
     public int print(Graphics g, PageFormat pf, int pageIndex) throws PrinterException {
         if (pageIndex > 0) return NO_SUCH_PAGE;
+        rowCount = 0;  // reset so alternating row shading is consistent on every pass
 
         Graphics2D g2 = (Graphics2D) g;
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);

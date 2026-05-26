@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.Window;
 import java.util.List;
 
 public class ManageAppointmentsPanel extends JPanel {
@@ -130,13 +131,14 @@ public class ManageAppointmentsPanel extends JPanel {
 
     private void updateStatus(String status) {
         int row = table.getSelectedRow();
+        Window win = SwingUtilities.getWindowAncestor(this);
         if (row < 0) {
-            JOptionPane.showMessageDialog(this, "Please select an appointment.", "Warning", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(win, "Please select an appointment.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         int id = (int) tableModel.getValueAt(row, 0);
         String patient = (String) tableModel.getValueAt(row, 1);
-        int confirm = JOptionPane.showConfirmDialog(this,
+        int confirm = JOptionPane.showConfirmDialog(win,
             "Set appointment for " + patient + " to " + status + "?",
             "Confirm", JOptionPane.YES_NO_OPTION);
         if (confirm != JOptionPane.YES_OPTION) return;
@@ -148,7 +150,7 @@ public class ManageAppointmentsPanel extends JPanel {
                     "Your appointment with Dr. " + a.getDoctorName() + " on " + a.getAppointmentDate() +
                     " has been " + status.toLowerCase() + " by the admin.")
             );
-            JOptionPane.showMessageDialog(this, "Status updated to " + status + ".", "Done", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(win, "Status updated to " + status + ".", "Done", JOptionPane.INFORMATION_MESSAGE);
             refresh();
         }
     }

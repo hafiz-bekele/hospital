@@ -38,8 +38,9 @@ public class NotificationDAO {
         String sql = "SELECT COUNT(*) FROM notifications WHERE user_id = ? AND is_read = 0";
         try (PreparedStatement ps = DBConnection.getConnection().prepareStatement(sql)) {
             ps.setInt(1, userId);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) return rs.getInt(1);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getInt(1);
+            }
         } catch (SQLException e) { e.printStackTrace(); }
         return 0;
     }

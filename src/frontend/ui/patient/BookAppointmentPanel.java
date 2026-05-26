@@ -41,6 +41,8 @@ public class BookAppointmentPanel extends JPanel {
     // Doctor table
     private JTable            doctorTable;
     private DefaultTableModel tableModel;
+    // Parallel list keeps doctor IDs aligned with table rows after filtering
+    private List<Integer>     tableDocIds = new ArrayList<>();
 
     // Selected doctor card
     private JLabel cardName, cardSpec, cardQual, cardExp;
@@ -403,6 +405,7 @@ public class BookAppointmentPanel extends JPanel {
         boolean isPlaceholder = searchField.getForeground().equals(MUTED);
 
         tableModel.setRowCount(0);
+        tableDocIds.clear();   // keep in sync with table rows
         int count = 0;
 
         for (Doctor d : allDoctors) {
@@ -416,13 +419,13 @@ public class BookAppointmentPanel extends JPanel {
                 || qual.contains(query);
 
             if (matches) {
-                String initials = getInitials(d.getFullName());
                 tableModel.addRow(new Object[]{
-                    initials,
+                    getInitials(d.getFullName()),
                     "Dr. " + d.getFullName(),
                     d.getSpecialization(),
                     d.getExperienceYears() + " yr"
                 });
+                tableDocIds.add(d.getId());  // store ID at same index as row
                 count++;
             }
         }
@@ -444,14 +447,12 @@ public class BookAppointmentPanel extends JPanel {
 
     private void onRowSelected() {
         int row = doctorTable.getSelectedRow();
-        if (row < 0) { clearDoctorCard(); return; }
+        if (row < 0 || row >= tableDocIds.size()) { clearDoctorCard(); return; }
 
-        String displayName = (String) tableModel.getValueAt(row, 1); // "Dr. John"
-        String rawName = displayName.startsWith("Dr. ") ? displayName.substring(4) : displayName;
-
-        // Find matching doctor from allDoctors
+        // Look up by ID — safe even if two doctors share the same name
+        int doctorId = tableDocIds.get(row);
         Doctor selected = allDoctors.stream()
-            .filter(d -> d.getFullName().equalsIgnoreCase(rawName))
+            .filter(d -> d.getId() == doctorId)
             .findFirst().orElse(null);
 
         if (selected == null) return;
@@ -497,14 +498,14 @@ public class BookAppointmentPanel extends JPanel {
 
     private void bookAppointment() {
         int row = doctorTable.getSelectedRow();
-        if (row < 0) {
+        if (row < 0 || row >= tableDocIds.size()) {
             showMsg("Please select a doctor first.", false); return;
         }
 
-        String displayName = (String) tableModel.getValueAt(row, 1);
-        String rawName = displayName.startsWith("Dr. ") ? displayName.substring(4) : displayName;
+        // Look up by ID — safe even if two doctors share the same name
+        int doctorId = tableDocIds.get(row);
         Doctor doctor = allDoctors.stream()
-            .filter(d -> d.getFullName().equalsIgnoreCase(rawName))
+            .filter(d -> d.getId() == doctorId)
             .findFirst().orElse(null);
 
         Schedule sched = (Schedule) scheduleCombo.getSelectedItem();
