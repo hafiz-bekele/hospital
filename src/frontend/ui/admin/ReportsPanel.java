@@ -26,6 +26,7 @@ public class ReportsPanel extends JPanel {
         buildUI();
     }
 
+    // Build both report panels side by side
     private void buildUI() {
         add(buildDoctorReport());
         add(buildMonthlyReport());
@@ -33,6 +34,7 @@ public class ReportsPanel extends JPanel {
 
     // ── Left panel: appointments per doctor ───────────────────────
 
+    // Build the left panel showing appointment count per doctor
     private JPanel buildDoctorReport() {
         JPanel panel = new JPanel(new BorderLayout(6, 6));
         panel.setBackground(Color.WHITE);
@@ -59,6 +61,7 @@ public class ReportsPanel extends JPanel {
         return panel;
     }
 
+    // Load doctor appointment counts into the table
     private void loadDoctorReport(DefaultTableModel model) {
         model.setRowCount(0);
         for (String[] row : apptDAO.getAppointmentsPerDoctor()) {
@@ -68,6 +71,7 @@ public class ReportsPanel extends JPanel {
 
     // ── Right panel: monthly trend ────────────────────────────────
 
+    // Build the right panel showing monthly appointment trend with a bar chart
     private JPanel buildMonthlyReport() {
         JPanel panel = new JPanel(new BorderLayout(6, 6));
         panel.setBackground(Color.WHITE);
@@ -110,10 +114,12 @@ public class ReportsPanel extends JPanel {
         return panel;
     }
 
+    // Load monthly stats into the table (overload that fetches fresh data)
     private void loadMonthlyReport(DefaultTableModel model) {
         loadMonthlyReport(model, apptDAO.getMonthlyStats());
     }
 
+    // Load monthly stats into the table from already-fetched data
     private void loadMonthlyReport(DefaultTableModel model, List<String[]> data) {
         model.setRowCount(0);
         for (String[] row : data) {
@@ -123,6 +129,7 @@ public class ReportsPanel extends JPanel {
 
     // ── Shared button factory ─────────────────────────────────────
 
+    // Create a shared refresh button used by both report panels
     private JButton makeRefreshBtn() {
         JButton btn = new JButton("↻  Refresh");
         btn.setBackground(new Color(70, 70, 70));

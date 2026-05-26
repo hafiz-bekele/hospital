@@ -29,6 +29,7 @@ public class AppointmentsPanel extends JPanel {
         buildUI();
     }
 
+    // Build the main UI with filter bar, table, and action buttons
     private void buildUI() {
         // ── Filter bar ───────────────────────────────────────────
         JPanel filterBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 4));
@@ -131,6 +132,7 @@ public class AppointmentsPanel extends JPanel {
         refresh();
     }
 
+    // Reload appointments from DB and update the stats counters
     public void refresh() {
         tableModel.setRowCount(0);
         int pending = 0, approved = 0, rejected = 0;
@@ -156,6 +158,7 @@ public class AppointmentsPanel extends JPanel {
         rejectedCount.setText("Rejected: " + rejected);
     }
 
+    // Get the appointment ID from the selected table row (shows warning if nothing selected)
     private int getSelectedId() {
         int row = table.getSelectedRow();
         if (row < 0) {
@@ -165,6 +168,7 @@ public class AppointmentsPanel extends JPanel {
         return (int) tableModel.getValueAt(row, 0);
     }
 
+    // Approve or reject the selected appointment and notify the patient
     private void updateStatus(String status) {
         int id = getSelectedId();
         if (id < 0) return;
@@ -190,6 +194,7 @@ public class AppointmentsPanel extends JPanel {
         }
     }
 
+    // Open a dialog to add or edit medical notes for the selected appointment
     private void addNotes() {
         int id = getSelectedId();
         if (id < 0) return;
@@ -220,6 +225,7 @@ public class AppointmentsPanel extends JPanel {
         }
     }
 
+    // Show a popup with full appointment details for the selected row
     private void viewPatientDetails() {
         int row = table.getSelectedRow();
         if (row < 0) {
@@ -243,11 +249,13 @@ public class AppointmentsPanel extends JPanel {
         JOptionPane.showMessageDialog(this, info, "Patient Appointment Details", JOptionPane.PLAIN_MESSAGE);
     }
 
+    // Add a label + value row to the patient details popup
     private void addInfoRow(JPanel p, String label, String value) {
         JLabel lbl = new JLabel(label); lbl.setFont(new Font("Arial", Font.BOLD, 12)); p.add(lbl);
         JLabel val = new JLabel(value); val.setFont(new Font("Arial", Font.PLAIN, 12)); p.add(val);
     }
 
+    // Create a styled action button with a colored background
     private JButton styledBtn(String text, Color bg) {
         JButton btn = new JButton(text);
         btn.setBackground(bg);
@@ -261,6 +269,7 @@ public class AppointmentsPanel extends JPanel {
         return btn;
     }
 
+    // Create a colored status badge label (e.g. "Pending: 3")
     private JLabel makeBadge(String text, Color color) {
         JLabel lbl = new JLabel(text + ": 0");
         lbl.setForeground(color); lbl.setFont(new Font("Arial", Font.BOLD, 13));

@@ -24,6 +24,7 @@ public class ManageSchedulesPanel extends JPanel {
         buildUI();
     }
 
+    // Build the main UI with table and action buttons
     private void buildUI() {
         String[] cols = {"ID", "Doctor", "Date", "Start Time", "End Time", "Max Patients"};
         tableModel = new DefaultTableModel(cols, 0) {
@@ -60,6 +61,7 @@ public class ManageSchedulesPanel extends JPanel {
         loadSchedules();
     }
 
+    // Load all schedules from DB and populate the table
     private void loadSchedules() {
         tableModel.setRowCount(0);
         for (Schedule s : scheduleDAO.getAllSchedules()) {
@@ -70,6 +72,7 @@ public class ManageSchedulesPanel extends JPanel {
         }
     }
 
+    // Open a dialog to add a new schedule slot for a doctor
     private void showAddScheduleDialog() {
         // Always use the top-level JFrame as dialog parent.
         // Using 'this' (a JPanel inside CardLayout) can cause dialogs to
@@ -197,6 +200,7 @@ public class ManageSchedulesPanel extends JPanel {
         }
     }
 
+    // Delete the selected schedule slot
     private void deleteSchedule() {
         int row = table.getSelectedRow();
         Frame owner = (Frame) SwingUtilities.getWindowAncestor(this);
@@ -216,6 +220,7 @@ public class ManageSchedulesPanel extends JPanel {
         }
     }
 
+    // Create a styled action button with a colored background
     private void styleBtn(JButton btn, Color bg) {
         btn.setBackground(bg);
         btn.setForeground(Color.WHITE);

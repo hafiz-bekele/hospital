@@ -19,6 +19,7 @@ public class ChangePasswordPanel extends JPanel {
         buildUI();
     }
 
+    // Build the change password form UI
     private void buildUI() {
         JPanel card = new JPanel(new GridBagLayout());
         card.setBackground(Color.WHITE);
@@ -70,6 +71,7 @@ public class ChangePasswordPanel extends JPanel {
         add(wrapper, BorderLayout.CENTER);
     }
 
+    // Add a label + field row to the form card
     private void addRow(JPanel p, GridBagConstraints gbc, int row, String label, JComponent field) {
         gbc.gridx = 0; gbc.gridy = row; gbc.weightx = 0; gbc.fill = GridBagConstraints.HORIZONTAL;
         JLabel lbl = new JLabel(label);
@@ -79,6 +81,7 @@ public class ChangePasswordPanel extends JPanel {
         p.add(field, gbc);
     }
 
+    // Handle the "Update Password" button — validate and save the new password
     private void doChange() {
         String oldPass  = new String(oldPassField.getPassword()).trim();
         String newPass  = new String(newPassField.getPassword()).trim();

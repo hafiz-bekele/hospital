@@ -25,6 +25,7 @@ public class ManageAppointmentsPanel extends JPanel {
         buildUI();
     }
 
+    // Build the main UI with stats bar, table, and action buttons
     private void buildUI() {
         // ── Stats bar ────────────────────────────────────────────
         JPanel statsBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 4));
@@ -103,6 +104,7 @@ public class ManageAppointmentsPanel extends JPanel {
         refresh();
     }
 
+    // Reload all appointments from DB and update the stats counters
     public void refresh() {
         tableModel.setRowCount(0);
         int total = 0, pending = 0, approved = 0, rejected = 0;
@@ -129,6 +131,7 @@ public class ManageAppointmentsPanel extends JPanel {
         rejectedLbl.setText("Rejected: " + rejected);
     }
 
+    // Change the status of the selected appointment and notify the patient
     private void updateStatus(String status) {
         int row = table.getSelectedRow();
         Window win = SwingUtilities.getWindowAncestor(this);
@@ -179,6 +182,7 @@ public class ManageAppointmentsPanel extends JPanel {
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
+    // Create a colored status badge label (e.g. "Total: 0")
     private JLabel badge(String text, Color color) {
         JLabel l = new JLabel(text + ": 0");
         l.setForeground(color);

@@ -64,6 +64,7 @@ public class BookAppointmentPanel extends JPanel {
         buildUI();
     }
 
+    // Build the main UI with search bar, doctor table, doctor card, and booking form
     private void buildUI() {
         // ── LEFT: search + doctor list ───────────────────────────
         JPanel left = new JPanel(new BorderLayout(0, 10));
@@ -95,6 +96,7 @@ public class BookAppointmentPanel extends JPanel {
 
     // ── Search bar ───────────────────────────────────────────────
 
+    // Build the search bar with live filter and result count
     private JPanel buildSearchBar() {
         JPanel panel = new JPanel(new BorderLayout(8, 0));
         panel.setBackground(BG);
@@ -178,6 +180,7 @@ public class BookAppointmentPanel extends JPanel {
 
     // ── Doctor table ─────────────────────────────────────────────
 
+    // Build the doctor list table with avatar column and row selection
     private JScrollPane buildDoctorTable() {
         String[] cols = {"", "Doctor", "Specialization", "Exp"};
         tableModel = new DefaultTableModel(cols, 0) {
@@ -249,6 +252,7 @@ public class BookAppointmentPanel extends JPanel {
 
     // ── Doctor info card ─────────────────────────────────────────
 
+    // Build the selected doctor info card (name, specialization, experience)
     private JPanel buildDoctorCard() {
         doctorCard = new JPanel(new GridBagLayout());
         doctorCard.setBackground(CARD);
@@ -313,6 +317,7 @@ public class BookAppointmentPanel extends JPanel {
 
     // ── Booking form ─────────────────────────────────────────────
 
+    // Build the booking form with schedule dropdown, reason field, and book button
     private JPanel buildBookingForm() {
         JPanel form = new JPanel(new GridBagLayout());
         form.setBackground(CARD);
@@ -395,11 +400,13 @@ public class BookAppointmentPanel extends JPanel {
 
     // ── Data loading ─────────────────────────────────────────────
 
+    // Load all doctors from the database and show them in the table
     private void loadDoctors() {
         allDoctors = doctorDAO.getAllDoctors();
         filterDoctors();
     }
 
+    // Filter the doctor table based on what the user typed in the search box
     private void filterDoctors() {
         String query = searchField.getText().trim().toLowerCase();
         boolean isPlaceholder = searchField.getForeground().equals(MUTED);
@@ -445,6 +452,7 @@ public class BookAppointmentPanel extends JPanel {
         }
     }
 
+    // Called when user clicks a row — updates the doctor card and schedule dropdown
     private void onRowSelected() {
         int row = doctorTable.getSelectedRow();
         if (row < 0 || row >= tableDocIds.size()) { clearDoctorCard(); return; }
@@ -485,6 +493,7 @@ public class BookAppointmentPanel extends JPanel {
         bookMsg.setText(" ");
     }
 
+    // Reset the doctor card to its empty/default state
     private void clearDoctorCard() {
         cardName.setText("Select a doctor from the list");
         cardSpec.setText(" ");
@@ -496,6 +505,7 @@ public class BookAppointmentPanel extends JPanel {
 
     // ── Book action ──────────────────────────────────────────────
 
+    // Handle the "Confirm Booking" button — validate and save the appointment
     private void bookAppointment() {
         int row = doctorTable.getSelectedRow();
         if (row < 0 || row >= tableDocIds.size()) {
@@ -545,6 +555,7 @@ public class BookAppointmentPanel extends JPanel {
         }
     }
 
+    // Show a success or error message below the book button
     private void showMsg(String text, boolean success) {
         bookMsg.setText(text);
         bookMsg.setForeground(success ? SUCCESS : new Color(220, 38, 38));
@@ -552,6 +563,7 @@ public class BookAppointmentPanel extends JPanel {
 
     // ── Utilities ────────────────────────────────────────────────
 
+    // Get first letters of a name for the avatar circle (e.g. "John Doe" -> "JD")
     private String getInitials(String fullName) {
         if (fullName == null || fullName.isEmpty()) return "?";
         String[] parts = fullName.trim().split("\\s+");
@@ -559,6 +571,7 @@ public class BookAppointmentPanel extends JPanel {
         return (parts[0].substring(0, 1) + parts[parts.length - 1].substring(0, 1)).toUpperCase();
     }
 
+    // Create a bold label for form fields
     private JLabel fieldLabel(String text) {
         JLabel l = new JLabel(text);
         l.setFont(new Font("Segoe UI", Font.BOLD, 12));

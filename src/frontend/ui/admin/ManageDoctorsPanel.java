@@ -24,6 +24,7 @@ public class ManageDoctorsPanel extends JPanel {
         buildUI();
     }
 
+    // Build the main UI with table and action buttons
     private void buildUI() {
         String[] cols = {"ID", "Full Name", "Specialization", "Qualification", "Experience (yrs)"};
         tableModel = new DefaultTableModel(cols, 0) {
@@ -72,6 +73,7 @@ public class ManageDoctorsPanel extends JPanel {
         loadDoctors();
     }
 
+    // Load all doctors from DB and populate the table
     private void loadDoctors() {
         tableModel.setRowCount(0);
         for (Doctor d : doctorDAO.getAllDoctors()) {
@@ -84,6 +86,7 @@ public class ManageDoctorsPanel extends JPanel {
 
     // ── Add Doctor ────────────────────────────────────────────────
 
+    // Open a dialog to add a new doctor (creates user account + doctor profile)
     private void showAddDoctorDialog() {
         JTextField nameField  = new JTextField(15);
         JTextField userField  = new JTextField(15);
@@ -144,6 +147,7 @@ public class ManageDoctorsPanel extends JPanel {
 
     // ── Edit Doctor ───────────────────────────────────────────────
 
+    // Open a dialog to edit the selected doctor's details
     private void showEditDoctorDialog() {
         int row = table.getSelectedRow();
         if (row < 0) {
@@ -238,6 +242,7 @@ public class ManageDoctorsPanel extends JPanel {
 
     // ── View Credentials ──────────────────────────────────────────
 
+    // Show the selected doctor's login credentials (username + password)
     private void showCredentials() {
         int row = table.getSelectedRow();
         if (row < 0) {
@@ -300,6 +305,7 @@ public class ManageDoctorsPanel extends JPanel {
 
     // ── Delete Doctor ─────────────────────────────────────────────
 
+    // Delete the selected doctor from the system
     private void deleteDoctor() {
         int row = table.getSelectedRow();
         if (row < 0) {
@@ -324,6 +330,7 @@ public class ManageDoctorsPanel extends JPanel {
 
     // ── Helpers ───────────────────────────────────────────────────
 
+    // Add a label + field row to a form panel
     private void addRow(JPanel p, GridBagConstraints gbc, int row, String label, JComponent field) {
         gbc.gridx = 0; gbc.gridy = row; gbc.weightx = 0; gbc.gridwidth = 1;
         JLabel lbl = new JLabel(label);
@@ -333,6 +340,7 @@ public class ManageDoctorsPanel extends JPanel {
         p.add(field, gbc);
     }
 
+    // Add a label + value row to an info panel
     private void addInfoRow(JPanel p, GridBagConstraints gbc, int row, String label, String value) {
         gbc.gridx = 0; gbc.gridy = row; gbc.weightx = 0; gbc.gridwidth = 1;
         JLabel lbl = new JLabel(label);
@@ -344,6 +352,7 @@ public class ManageDoctorsPanel extends JPanel {
         p.add(val, gbc);
     }
 
+    // Create a styled action button with a colored background
     private void styleBtn(JButton btn, Color bg) {
         btn.setBackground(bg);
         btn.setForeground(Color.WHITE);

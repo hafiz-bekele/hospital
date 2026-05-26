@@ -27,6 +27,7 @@ public class MyAppointmentsPanel extends JPanel {
         buildUI();
     }
 
+    // Build the main UI with stats bar, appointments table, and action buttons
     private void buildUI() {
         // ── Stats bar ────────────────────────────────────────────
         JPanel statsBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 4));
@@ -109,6 +110,7 @@ public class MyAppointmentsPanel extends JPanel {
         refresh();
     }
 
+    // Reload appointments from DB and update all status counters
     public void refresh() {
         tableModel.setRowCount(0);
         int total = 0, pending = 0, approved = 0, rejected = 0, cancelled = 0;
@@ -136,6 +138,7 @@ public class MyAppointmentsPanel extends JPanel {
         cancelledLbl.setText("Cancelled: " + cancelled);
     }
 
+    // Cancel the selected appointment (only PENDING ones can be cancelled)
     private void cancelAppointment() {
         int row = table.getSelectedRow();
         if (row < 0) { warn("Please select an appointment to cancel."); return; }
@@ -156,6 +159,7 @@ public class MyAppointmentsPanel extends JPanel {
         }
     }
 
+    // Show a popup with full details of the selected appointment
     private void viewDetails() {
         int row = table.getSelectedRow();
         if (row < 0) { warn("Please select an appointment to view."); return; }
@@ -197,6 +201,7 @@ public class MyAppointmentsPanel extends JPanel {
         JOptionPane.showMessageDialog(this, panel, "Appointment Details", JOptionPane.PLAIN_MESSAGE);
     }
 
+    // Add a label + value row to the details popup
     private void addDetailRow(JPanel p, GridBagConstraints gbc, int row, String label, String value) {
         gbc.gridx = 0; gbc.gridy = row;
         JLabel lbl = new JLabel(label); lbl.setFont(new Font("Arial", Font.BOLD, 13)); p.add(lbl, gbc);
@@ -204,6 +209,7 @@ public class MyAppointmentsPanel extends JPanel {
         JLabel val = new JLabel(value != null ? value : "—"); val.setFont(new Font("Arial", Font.PLAIN, 13)); p.add(val, gbc);
     }
 
+    // Open the print dialog for the selected appointment receipt
     private void printReceipt() {
         int row = table.getSelectedRow();
         if (row < 0) { warn("Please select an appointment to print."); return; }
@@ -225,10 +231,12 @@ public class MyAppointmentsPanel extends JPanel {
             date, timeSlot, reason, status, notes);
     }
 
+    // Show a warning dialog with the given message
     private void warn(String msg) {
         JOptionPane.showMessageDialog(this, msg, "Warning", JOptionPane.WARNING_MESSAGE);
     }
 
+    // Create a styled action button with a colored background
     private void styleBtn(JButton btn, Color bg) {
         btn.setBackground(bg);
         btn.setForeground(Color.WHITE);
@@ -240,6 +248,7 @@ public class MyAppointmentsPanel extends JPanel {
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
+    // Create a colored status badge label (e.g. "Pending: 0")
     private JLabel badge(String text, Color color) {
         JLabel l = new JLabel(text + ": 0"); l.setForeground(color); l.setFont(new Font("Arial", Font.BOLD, 13)); return l;
     }

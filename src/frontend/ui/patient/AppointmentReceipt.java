@@ -6,33 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
-/**
- * AppointmentReceipt — prints a clean one-page receipt for an appointment.
- *
- * Uses Java's built-in PrinterJob API (no extra libraries needed).
- *
- * How to use:
- *   AppointmentReceipt.print(parent,
- *       patientName, doctorName, date, timeSlot, reason, status, notes);
- *
- * The receipt looks like:
- *
- *   ┌─────────────────────────────────────┐
- *   │         CITY HOSPITAL               │
- *   │     Appointment Receipt             │
- *   ├─────────────────────────────────────┤
- *   │  Appointment ID : #42               │
- *   │  Patient        : John Doe          │
- *   │  Doctor         : Dr. Smith         │
- *   │  Date           : 2026-06-01        │
- *   │  Time           : 09:00 - 10:00     │
- *   │  Reason         : Headache          │
- *   │  Status         : APPROVED          │
- *   │  Medical Notes  : Take rest...      │
- *   ├─────────────────────────────────────┤
- *   │  Printed: 2026-05-26 14:30          │
- *   └─────────────────────────────────────┘
- */
+
 public class AppointmentReceipt implements Printable {
 
     // ── Receipt data fields ───────────────────────────────────────

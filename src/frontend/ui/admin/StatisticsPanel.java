@@ -24,6 +24,7 @@ public class StatisticsPanel extends JPanel {
         refresh();
     }
 
+    // Build the statistics dashboard with 6 stat cards
     private void buildUI() {
         JLabel title = new JLabel("Hospital Statistics Dashboard", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 20));
@@ -66,6 +67,7 @@ public class StatisticsPanel extends JPanel {
         add(btnPanel, BorderLayout.SOUTH);
     }
 
+    // Create a colored stat card with a label and a big number
     private JPanel createCard(String label, JLabel valueLabel, Color color) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(color);
@@ -84,6 +86,7 @@ public class StatisticsPanel extends JPanel {
         return card;
     }
 
+    // Reload all counts from DB and update the stat cards
     public void refresh() {
         totalPatientsLbl.setText(String.valueOf(userDAO.getTotalPatients()));
         totalDoctorsLbl.setText(String.valueOf(doctorDAO.getTotalDoctors()));

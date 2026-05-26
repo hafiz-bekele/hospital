@@ -25,6 +25,7 @@ public class ViewPatientsPanel extends JPanel {
         buildUI();
     }
 
+    // Build the main UI with stats bar, patient table, and action buttons
     private void buildUI() {
         // ── Stats bar ────────────────────────────────────────────
         JPanel statsBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 4));
@@ -72,6 +73,7 @@ public class ViewPatientsPanel extends JPanel {
         refresh();
     }
 
+    // Reload all patients from DB and update the table
     public void refresh() {
         tableModel.setRowCount(0);
         List<User> patients = userDAO.getAllPatients();
@@ -87,6 +89,7 @@ public class ViewPatientsPanel extends JPanel {
         totalLbl.setText("Total Patients: " + patients.size());
     }
 
+    // Show a popup with all appointments for the selected patient
     private void viewPatientAppointments() {
         int row = table.getSelectedRow();
         if (row < 0) {
@@ -143,6 +146,7 @@ public class ViewPatientsPanel extends JPanel {
             JOptionPane.PLAIN_MESSAGE);
     }
 
+    // Create a styled action button with a colored background
     private void styleBtn(JButton btn, Color bg) {
         btn.setBackground(bg);
         btn.setForeground(Color.WHITE);

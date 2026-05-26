@@ -24,6 +24,7 @@ public class SearchAppointmentsPanel extends JPanel {
         buildUI();
     }
 
+    // Build the main UI with search form and results table
     private void buildUI() {
         // ── Search form ──────────────────────────────────────────
         JPanel form = new JPanel(new GridBagLayout());
@@ -102,6 +103,7 @@ public class SearchAppointmentsPanel extends JPanel {
         add(resultLbl, BorderLayout.SOUTH);
     }
 
+    // Add a label + field pair to the search form
     private void addField(JPanel p, GridBagConstraints gbc, int col, int row, String label, JComponent field) {
         gbc.gridx = col; gbc.gridy = row; gbc.gridwidth = 1; gbc.weightx = 1; gbc.fill = GridBagConstraints.HORIZONTAL;
         JPanel fp = new JPanel(new BorderLayout(4, 2));
@@ -113,6 +115,7 @@ public class SearchAppointmentsPanel extends JPanel {
         p.add(fp, gbc);
     }
 
+    // Run the search query and populate the results table
     private void doSearch() {
         String patient = patientField.getText().trim();
         String doctor  = doctorField.getText().trim();

@@ -24,6 +24,7 @@ public class NotificationsPanel extends JPanel {
         buildUI();
     }
 
+    // Build the main UI with header, notifications table, and action buttons
     private void buildUI() {
         // ── Header bar ───────────────────────────────────────────
         JPanel topBar = new JPanel(new BorderLayout());
@@ -94,6 +95,7 @@ public class NotificationsPanel extends JPanel {
         refresh();
     }
 
+    // Reload notifications from DB and update the unread count label
     public void refresh() {
         tableModel.setRowCount(0);
         List<Notification> list = notifDAO.getForUser(user.getId());
@@ -114,6 +116,7 @@ public class NotificationsPanel extends JPanel {
         return notifDAO.countUnread(user.getId());
     }
 
+    // Create a styled action button with a colored background
     private void styleBtn(JButton btn, Color bg) {
         btn.setBackground(bg);
         btn.setForeground(Color.WHITE);
