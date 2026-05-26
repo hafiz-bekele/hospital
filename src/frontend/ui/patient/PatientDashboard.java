@@ -17,6 +17,7 @@ public class PatientDashboard extends JFrame {
         this.patient = patient;
         setTitle("Patient Portal — " + patient.getFullName());
         setSize(1100, 720);
+        setResizable(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         buildUI();

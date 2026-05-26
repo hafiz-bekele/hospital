@@ -30,10 +30,11 @@ public class LoginFrame extends JFrame {
 
     public LoginFrame() {
         setTitle("Hospital System — Login");
-        setSize(440, 560);
+        setSize(520, 480);
+        setMinimumSize(new Dimension(480, 440));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setResizable(true);
         setBackground(BG);
         buildUI();
     }
@@ -41,18 +42,18 @@ public class LoginFrame extends JFrame {
     private void buildUI() {
         JPanel root = new JPanel(new GridBagLayout());
         root.setBackground(BG);
-        root.setBorder(new EmptyBorder(30, 40, 30, 40));
+        root.setBorder(new EmptyBorder(20, 40, 20, 40));
 
         JPanel card = new JPanel();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(CARD);
         card.setBorder(new CompoundBorder(
             new LineBorder(BORDER_CLR, 1, true),
-            new EmptyBorder(36, 36, 36, 36)
+            new EmptyBorder(24, 36, 24, 36)
         ));
 
         JLabel icon = new JLabel("🏥", SwingConstants.CENTER);
-        icon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 42));
+        icon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 32));
         icon.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel title = new JLabel("Hospital System", SwingConstants.CENTER);
@@ -87,25 +88,25 @@ public class LoginFrame extends JFrame {
         hint.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         card.add(icon);
-        card.add(Box.createVerticalStrut(8));
+        card.add(Box.createVerticalStrut(6));
         card.add(title);
-        card.add(Box.createVerticalStrut(4));
+        card.add(Box.createVerticalStrut(2));
         card.add(subtitle);
-        card.add(Box.createVerticalStrut(24));
+        card.add(Box.createVerticalStrut(16));
         card.add(labelFor("Username"));
         card.add(Box.createVerticalStrut(4));
         card.add(usernameField);
-        card.add(Box.createVerticalStrut(14));
+        card.add(Box.createVerticalStrut(10));
         card.add(labelFor("Password"));
         card.add(Box.createVerticalStrut(4));
         card.add(passwordField);
-        card.add(Box.createVerticalStrut(8));
+        card.add(Box.createVerticalStrut(6));
         card.add(errorLabel);
-        card.add(Box.createVerticalStrut(16));
+        card.add(Box.createVerticalStrut(12));
         card.add(loginBtn);
-        card.add(Box.createVerticalStrut(10));
+        card.add(Box.createVerticalStrut(8));
         card.add(registerBtn);
-        card.add(Box.createVerticalStrut(20));
+        card.add(Box.createVerticalStrut(14));
         card.add(hint);
 
         root.add(card);

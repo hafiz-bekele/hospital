@@ -12,22 +12,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-/**
- * Admin Dashboard — main window after admin logs in.
- *
- * Layout:
- *   ┌─────────────────────────────────────────┐
- *   │              Header bar                 │
- *   ├──────────┬──────────────────────────────┤
- *   │          │                              │
- *   │ Sidebar  │       Content panel          │
- *   │  (nav)   │                              │
- *   │          │                              │
- *   └──────────┴──────────────────────────────┘
- *
- * The sidebar replaces JTabbedPane.LEFT so emoji icons render
- * properly on Windows and the nav looks clean and modern.
- */
+
 public class AdminDashboard extends JFrame {
 
     // ── Colour palette ────────────────────────────────────────────
@@ -75,6 +60,7 @@ public class AdminDashboard extends JFrame {
         setTitle("Admin Portal — " + admin.getFullName());
         setSize(1200, 760);
         setMinimumSize(new Dimension(900, 600));
+        setResizable(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         buildUI();

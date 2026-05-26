@@ -23,10 +23,11 @@ public class RegisterFrame extends JFrame {
 
     public RegisterFrame() {
         setTitle("Patient Registration");
-        setSize(480, 640);
+        setSize(480, 680);
+        setMinimumSize(new Dimension(400, 580));
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setResizable(true);
         buildUI();
     }
 

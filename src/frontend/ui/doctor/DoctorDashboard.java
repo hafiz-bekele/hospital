@@ -21,6 +21,7 @@ public class DoctorDashboard extends JFrame {
         this.doctor = new DoctorDAO().getDoctorByUserId(user.getId());
         setTitle("Doctor Portal — Dr. " + user.getFullName());
         setSize(1100, 720);
+        setResizable(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         buildUI();
