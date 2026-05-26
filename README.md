@@ -84,19 +84,6 @@ HospitalSystem/
 └── run.bat                          # Run script
 ```
 
-## Setup Instructions
-
-### Prerequisites
-1. **Java 21** - Ensure Java is installed and `JAVA_HOME` is set
-2. **XAMPP** - For MySQL database server
-3. **MySQL Connector** - Already included in the project
-
-### Database Setup
-1. Start XAMPP and ensure MySQL is running
-2. Open phpMyAdmin (http://localhost/phpmyadmin)
-3. Create a new database named `hospital_db`
-4. Import the `hospital_db.sql` file
-
 ### Running the Application
 
 #### Option 1: Using the run script
