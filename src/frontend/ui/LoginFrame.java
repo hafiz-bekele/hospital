@@ -29,7 +29,7 @@ public class LoginFrame extends JFrame {
     private UserDAO        userDAO = new UserDAO();
 
     public LoginFrame() {
-        setTitle("Hospital System — Login");
+        setTitle("Kombolcha City Hospital — Login");
         setSize(520, 480);
         setMinimumSize(new Dimension(480, 440));
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -57,7 +57,7 @@ public class LoginFrame extends JFrame {
         icon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 32));
         icon.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel title = new JLabel("Hospital System", SwingConstants.CENTER);
+        JLabel title = new JLabel("Kombolcha City Hospital", SwingConstants.CENTER);
         title.setFont(new Font("Segoe UI", Font.BOLD, 22));
         title.setForeground(TEXT);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);

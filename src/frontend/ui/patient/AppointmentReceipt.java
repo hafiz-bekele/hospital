@@ -112,7 +112,7 @@ public class AppointmentReceipt implements Printable {
         g2.setFont(new Font("Segoe UI", Font.BOLD, 20));
         g2.setColor(Color.BLACK);
         y += 28;
-        drawCentred(g2, "CITY HOSPITAL", pageWidth, y);
+        drawCentred(g2, "KOMBOLCHA CITY HOSPITAL", pageWidth, y);
 
         // ── Subtitle ──────────────────────────────────────────────
         g2.setFont(new Font("Segoe UI", Font.PLAIN, 12));

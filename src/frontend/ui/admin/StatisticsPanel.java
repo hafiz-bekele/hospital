@@ -26,7 +26,7 @@ public class StatisticsPanel extends JPanel {
 
     // Build the statistics dashboard with 6 stat cards
     private void buildUI() {
-        JLabel title = new JLabel("Hospital Statistics Dashboard", SwingConstants.CENTER);
+        JLabel title = new JLabel("Kombolcha City Hospital — Statistics Dashboard", SwingConstants.CENTER);
         title.setFont(new Font("Arial", Font.BOLD, 20));
         title.setForeground(new Color(80, 0, 120));
         title.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
