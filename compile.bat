@@ -18,6 +18,7 @@ javac -cp "%JAR%" -d out -sourcepath src ^
   src\backend\dao\ScheduleDAO.java ^
   src\backend\dao\AppointmentDAO.java ^
   src\backend\dao\NotificationDAO.java ^
+  src\frontend\ui\HomeFrame.java ^
   src\frontend\ui\LoginFrame.java ^
   src\frontend\ui\RegisterFrame.java ^
   src\frontend\ui\common\NotificationsPanel.java ^

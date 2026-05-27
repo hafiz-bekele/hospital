@@ -1,4 +1,4 @@
-import frontend.ui.LoginFrame;
+import frontend.ui.HomeFrame;
 import javax.swing.*;
 
 public class Main {
@@ -7,6 +7,6 @@ public class Main {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception ignored) {}
 
-        SwingUtilities.invokeLater(() -> new LoginFrame().setVisible(true));
+        SwingUtilities.invokeLater(() -> new HomeFrame().setVisible(true));
     }
 }
