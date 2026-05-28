@@ -83,11 +83,6 @@ public class LoginFrame extends JFrame {
         registerBtn.addActionListener(e -> { new RegisterFrame().setVisible(true); dispose(); });
         passwordField.addActionListener(e -> doLogin());
 
-        JLabel hint = new JLabel("Default admin: admin / admin123", SwingConstants.CENTER);
-        hint.setFont(new Font("Segoe UI", Font.ITALIC, 11));
-        hint.setForeground(MUTED);
-        hint.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         card.add(icon);
         card.add(Box.createVerticalStrut(6));
         card.add(title);
@@ -107,8 +102,6 @@ public class LoginFrame extends JFrame {
         card.add(loginBtn);
         card.add(Box.createVerticalStrut(8));
         card.add(registerBtn);
-        card.add(Box.createVerticalStrut(14));
-        card.add(hint);
 
         root.add(card);
         add(root);
